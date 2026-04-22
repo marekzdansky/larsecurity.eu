@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LarSecurity.cz — BOZP a PO školení</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #FFFFFF;
+      --bg2:       #F6F5F3;
+      --bg3:       #EDECEA;
+      --accent:    #BE1622;
+      --accent2:   #D41E2C;
+      --text:      #1C1917;
+      --muted:     #6B7280;
+      --border:    rgba(0,0,0,0.09);
+      --nav-h:     68px;
+      --nav-bg:    rgba(255,255,255,0.88);
+      --nav-bg-scrolled: rgba(255,255,255,0.97);
+    }
+    [data-theme="dark"] {
+      --bg:        #0F1117;
+      --bg2:       #161B27;
+      --bg3:       #1E2535;
+      --text:      #F0EEE9;
+      --muted:     #9CA3AF;
+      --border:    rgba(255,255,255,0.08);
+      --nav-bg:    rgba(15,17,23,0.88);
+      --nav-bg-scrolled: rgba(15,17,23,0.97);
+    }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── Utility ─── */
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .accent { color: var(--accent); }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+    /* ─── Scroll-reveal ─── */
+    .reveal { opacity: 0; transform: translateY(36px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+    .reveal-delay-5 { transition-delay: .5s; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h);
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      transition: background .3s;
+    }
+    nav.scrolled { background: var(--nav-bg-scrolled); }
+    .nav-inner {
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-logo img { height: 36px; width: auto; display: block; }
+    .nav-logo-badge {
+      font-size: .65rem; font-weight: 500; color: var(--muted);
+      border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px;
+      letter-spacing: .8px; text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: .875rem; font-weight: 500; color: var(--muted);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent); color: #fff;
+      padding: 9px 22px; border-radius: 6px;
+      font-size: .875rem; font-weight: 600;
+      transition: background .2s, transform .15s;
+      white-space: nowrap;
+    }
+    .nav-cta:hover { background: var(--accent2); transform: translateY(-1px); }
+
+    /* Hamburger */
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 6px; border: none; background: none;
+    }
+    .nav-hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--text); border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .nav-mobile {
+      display: none; position: fixed; top: var(--nav-h); left: 0; right: 0;
+      background: rgba(255,255,255,0.98); z-index: 99;
+      padding: 24px; flex-direction: column; gap: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a {
+      display: block; padding: 14px 0;
+      font-size: 1rem; font-weight: 500; color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-mobile a:last-child { border: none; color: var(--accent); font-weight: 600; }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding-top: var(--nav-h);
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 70% 40%, rgba(190,22,34,.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 70%, rgba(190,22,34,.04) 0%, transparent 60%);
+    }
+    .hero-grid-lines {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(0,0,0,.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,.055) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at 50% 50%, black 30%, transparent 80%);
+    }
+    .hero-layout {
+      position: relative; z-index: 1;
+      display: flex; align-items: center;
+      gap: 48px; width: 100%;
+    }
+    .hero-content {
+      flex: 1; min-width: 0;
+    }
+    .hero-visual {
+      flex-shrink: 0; width: 460px;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .hero-svg {
+      width: 100%; height: auto;
+      animation: heroFloat 6s ease-in-out infinite;
+    }
+    @keyframes heroFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    @media (max-width: 1100px) { .hero-visual { width: 380px; } }
+    @media (max-width: 900px) {
+      .hero-layout { flex-direction: column; gap: 40px; }
+      .hero-visual { width: 100%; max-width: 380px; margin: 0 auto; }
+      .hero-svg { animation: none; }
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: .8rem; font-weight: 600; letter-spacing: 1.2px;
+      text-transform: uppercase; color: var(--accent);
+      border: 1px solid rgba(190,22,34,.3);
+      padding: 5px 14px; border-radius: 100px;
+      margin-bottom: 28px;
+    }
+    .hero-tag::before {
+      content: ''; display: block; width: 6px; height: 6px;
+      background: var(--accent); border-radius: 50%;
+    }
+    .hero-heading {
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      font-weight: 700; line-height: 1.1;
+      letter-spacing: -1.5px; margin-bottom: 24px;
+    }
+    .hero-heading em { font-style: normal; font-weight: 700; color: var(--text); }
+    .hero-subheading {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--muted); font-weight: 400; max-width: 560px;
+      margin-bottom: 44px; line-height: 1.7;
+    }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent); color: #fff;
+      padding: 14px 32px; border-radius: 8px;
+      font-size: 1rem; font-weight: 600;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 0 0 0 rgba(190,22,34,0);
+    }
+    .btn-primary:hover {
+      background: var(--accent2); transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(190,22,34,.3);
+    }
+    .btn-primary svg { transition: transform .2s; }
+    .btn-primary:hover svg { transform: translateX(3px); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--muted); font-size: .95rem; font-weight: 500;
+      transition: color .2s;
+    }
+    .btn-ghost:hover { color: var(--text); }
+    .hero-scroll-hint {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--muted); font-size: .75rem; letter-spacing: 1px;
+      text-transform: uppercase; opacity: .6;
+    }
+    .scroll-dot {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollLine 1.5s ease infinite;
+    }
+    @keyframes scrollLine { 0% { opacity:0; transform:scaleY(0) translateY(-10px); } 50%{opacity:1;} 100%{opacity:0;transform:scaleY(1) translateY(10px);} }
+
+    /* ─── Section shared ─── */
+    section { position: relative; }
+    .section-inner { padding: 100px 0; }
+    .section-label {
+      display: inline-block; font-size: .75rem; font-weight: 700;
+      letter-spacing: 1.8px; text-transform: uppercase; color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700; line-height: 1.15; letter-spacing: -.5px;
+      margin-bottom: 16px;
+    }
+    .section-lead {
+      font-size: 1.05rem; color: var(--muted);
+      max-width: 580px; line-height: 1.75;
+    }
+
+    /* Diagonal clip dividers */
+    .clip-top::before {
+      content: ''; display: block;
+      height: 70px; background: var(--bg);
+      clip-path: polygon(0 0, 100% 100%, 100% 0);
+      position: absolute; top: 0; left: 0; right: 0; z-index: 1;
+    }
+    .clip-bottom::after {
+      content: ''; display: block;
+      height: 70px; background: var(--bg);
+      clip-path: polygon(0 100%, 100% 0, 0 0);
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 1;
+    }
+
+    /* ─── SLUŽBY ─── */
+    #sluzby { background: var(--bg2); }
+    .sluzby-header { margin-bottom: 64px; }
+    .sluzby-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2px;
+    }
+    .sluzba-item {
+      padding: 40px 36px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+      transition: background .25s, border-color .25s;
+    }
+    .sluzba-item::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0; transition: opacity .3s;
+    }
+    .sluzba-item:hover { background: var(--bg3); border-color: rgba(190,22,34,.25); }
+    .sluzba-item:hover::before { opacity: 1; }
+    .sluzba-icon {
+      width: 48px; height: 48px; margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(190,22,34,.08);
+      border-radius: 10px;
+      color: var(--accent);
+    }
+    .sluzba-icon svg { width: 24px; height: 24px; }
+    .sluzba-name {
+      font-size: 1.05rem; font-weight: 700; margin-bottom: 10px;
+      color: var(--text);
+    }
+    .sluzba-desc {
+      font-size: .9rem; color: var(--muted); line-height: 1.7;
+    }
+    .sluzba-tags {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px;
+    }
+    .sluzba-tag {
+      font-size: .72rem; font-weight: 500; letter-spacing: .5px;
+      color: var(--muted); background: rgba(0,0,0,.04);
+      border: 1px solid var(--border);
+      padding: 3px 10px; border-radius: 4px;
+    }
+
+    /* ─── PARTNEŘI ─── */
+    #partneri { background: var(--bg); }
+    .partneri-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px; margin-top: 56px;
+    }
+    .partner-card {
+      padding: 40px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg2);
+      display: flex; flex-direction: column; gap: 16px;
+      transition: border-color .25s, transform .25s;
+    }
+    .partner-card:hover { border-color: rgba(190,22,34,.35); transform: translateY(-4px); }
+    .partner-logo-area {
+      font-size: 1.25rem; font-weight: 700; color: var(--text);
+      letter-spacing: -.3px;
+    }
+    .partner-logo-area span { color: var(--accent); }
+    .partner-logo-area img {
+      height: 40px; width: auto; max-width: 180px;
+      object-fit: contain; object-position: left;
+    }
+    [data-theme="dark"] .partner-logo-area img { filter: brightness(0) invert(1); }
+    .partner-desc { font-size: .9rem; color: var(--muted); line-height: 1.7; }
+    .partner-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .85rem; font-weight: 600; color: var(--accent);
+      margin-top: auto;
+      transition: gap .2s;
+    }
+    .partner-link:hover { gap: 10px; }
+    .partner-link svg { width: 14px; height: 14px; }
+
+    /* ─── O NÁS ─── */
+    #onas { background: var(--bg2); }
+    .onas-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .onas-visual {
+      position: relative;
+    }
+    .onas-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .onas-card::after {
+      content: '';
+      position: absolute; bottom: -30px; right: -30px;
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(190,22,34,.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .onas-avatar {
+      width: 72px; height: 72px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), #8a0e18);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; font-weight: 700; color: #fff;
+      margin-bottom: 20px; letter-spacing: -1px;
+    }
+    .onas-name { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
+    .onas-role { font-size: .85rem; color: var(--accent); font-weight: 600; letter-spacing: .5px; margin-bottom: 24px; }
+    .onas-badges { display: flex; flex-direction: column; gap: 12px; }
+    .onas-badge {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 14px 16px;
+      background: rgba(0,0,0,.03);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .onas-badge-icon {
+      width: 32px; height: 32px; flex-shrink: 0;
+      background: rgba(190,22,34,.08);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+    }
+    .onas-badge-icon svg { width: 16px; height: 16px; }
+    .onas-badge-text { font-size: .82rem; color: var(--muted); line-height: 1.5; }
+    .onas-badge-text strong { display: block; color: var(--text); font-size: .88rem; margin-bottom: 2px; }
+    .onas-text .section-lead { max-width: 100%; }
+    .onas-features { display: flex; flex-direction: column; gap: 20px; margin-top: 36px; }
+    .onas-feature {
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .onas-feature-line {
+      width: 3px; height: 100%; background: var(--accent);
+      border-radius: 3px; flex-shrink: 0; margin-top: 4px;
+    }
+    .onas-feature-inner h4 { font-size: .95rem; font-weight: 600; margin-bottom: 4px; }
+    .onas-feature-inner p { font-size: .875rem; color: var(--muted); }
+
+    /* ─── KONTAKT ─── */
+    #kontakt { background: var(--bg); }
+    .kontakt-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: start;
+    }
+    .kontakt-info { display: flex; flex-direction: column; gap: 32px; }
+    .kontakt-info-item { display: flex; gap: 16px; align-items: flex-start; }
+    .kontakt-info-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: rgba(190,22,34,.07);
+      border: 1px solid rgba(190,22,34,.2);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+    }
+    .kontakt-info-icon svg { width: 20px; height: 20px; }
+    .kontakt-info-label { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .kontakt-info-value { font-size: 1rem; font-weight: 500; }
+    .kontakt-info-value a { transition: color .2s; }
+    .kontakt-info-value a:hover { color: var(--accent); }
+
+    /* Form */
+    .kontakt-form { display: flex; flex-direction: column; gap: 18px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .form-group { display: flex; flex-direction: column; gap: 7px; }
+    .form-group label { font-size: .8rem; font-weight: 600; color: var(--muted); letter-spacing: .5px; text-transform: uppercase; }
+    .form-group input,
+    .form-group textarea {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: inherit; font-size: .95rem;
+      transition: border-color .2s, box-shadow .2s;
+      resize: vertical;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--muted); }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(190,22,34,.1);
+    }
+    .form-group textarea { min-height: 130px; }
+    .form-submit {
+      background: var(--accent); color: #fff;
+      padding: 14px 32px; border-radius: 8px;
+      font-size: 1rem; font-weight: 600; font-family: inherit;
+      border: none; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 10px;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      align-self: flex-start;
+    }
+    .form-submit:hover {
+      background: var(--accent2); transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(190,22,34,.25);
+    }
+    .form-submit svg { width: 18px; height: 18px; transition: transform .2s; }
+    .form-submit:hover svg { transform: translateX(3px); }
+    .form-notice { font-size: .8rem; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+
+    /* Toast */
+    #toast {
+      position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--bg); border: 1px solid rgba(190,22,34,.35);
+      color: var(--text); padding: 14px 28px; border-radius: 10px;
+      font-size: .9rem; font-weight: 500;
+      box-shadow: 0 12px 40px rgba(0,0,0,.12);
+      z-index: 1000; transition: transform .4s cubic-bezier(.34,1.56,.64,1), opacity .4s;
+      opacity: 0; pointer-events: none;
+      display: flex; align-items: center; gap: 10px;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    #toast svg { color: var(--accent); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 40px 0 32px;
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px 32px;
+    }
+    .footer-brand img { height: 28px; width: auto; display: block; opacity: .85; }
+    .footer-meta { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-links a { font-size: .82rem; color: var(--muted); transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-divider { width: 1px; height: 16px; background: var(--border); }
+    .footer-copy { font-size: .8rem; color: var(--muted); }
+
+    /* ─── Kurzy banner ─── */
+    #kurzy-banner {
+      background: linear-gradient(135deg, #8a0e18 0%, var(--accent) 50%, #c62030 100%);
+      position: relative; overflow: hidden;
+    }
+    #kurzy-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    #kurzy-banner::after {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(255,255,255,.1) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .kurzy-inner {
+      position: relative; z-index: 1;
+      padding: 72px 0;
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 48px;
+      flex-wrap: wrap;
+    }
+    .kurzy-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      color: #fff; font-size: .75rem; font-weight: 700;
+      letter-spacing: 1.4px; text-transform: uppercase;
+      padding: 5px 14px; border-radius: 100px;
+      margin-bottom: 20px;
+    }
+    .kurzy-badge::before {
+      content: ''; width: 6px; height: 6px;
+      background: #fff; border-radius: 50%;
+    }
+    .kurzy-heading {
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+      font-weight: 700; line-height: 1.15;
+      letter-spacing: -.5px; color: #fff;
+      margin-bottom: 14px;
+    }
+    .kurzy-sub {
+      font-size: 1rem; color: rgba(255,255,255,.8);
+      max-width: 480px; line-height: 1.7;
+    }
+    .kurzy-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #fff; color: var(--accent);
+      padding: 15px 34px; border-radius: 8px;
+      font-size: 1rem; font-weight: 700;
+      white-space: nowrap; flex-shrink: 0;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 24px rgba(0,0,0,.15);
+    }
+    .kurzy-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(0,0,0,.25); }
+    .kurzy-cta svg { transition: transform .2s; }
+    .kurzy-cta:hover svg { transform: translateX(4px); }
+    @media (max-width: 768px) {
+      .kurzy-inner { flex-direction: column; align-items: flex-start; gap: 32px; }
+    }
+
+    /* ─── Aktuality ─── */
+    #aktuality { background: var(--bg2); }
+    .aktuality-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px; margin-top: 56px;
+    }
+    .clanek-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
+    }
+    .clanek-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(190,22,34,.3);
+      box-shadow: 0 12px 36px rgba(0,0,0,.08);
+    }
+    .clanek-header {
+      padding: 28px 28px 0;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .clanek-kategorie {
+      font-size: .72rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--accent);
+      background: rgba(190,22,34,.08);
+      padding: 4px 10px; border-radius: 4px;
+    }
+    .clanek-datum {
+      font-size: .78rem; color: var(--muted);
+    }
+    .clanek-body { padding: 0 28px 28px; flex: 1; display: flex; flex-direction: column; }
+    .clanek-title {
+      font-size: 1.05rem; font-weight: 700;
+      line-height: 1.4; margin-bottom: 10px; color: var(--text);
+    }
+    .clanek-perex {
+      font-size: .875rem; color: var(--muted);
+      line-height: 1.7; flex: 1;
+    }
+    .clanek-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .85rem; font-weight: 600; color: var(--accent);
+      margin-top: 20px; transition: gap .2s;
+    }
+    .clanek-link:hover { gap: 10px; }
+    .clanek-link svg { width: 14px; height: 14px; }
+
+    /* ─── Theme toggle ─── */
+    .theme-toggle {
+      width: 38px; height: 38px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg2);
+      color: var(--text);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, border-color .2s, transform .15s;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover { background: var(--bg3); transform: translateY(-1px); }
+    .theme-toggle svg { width: 18px; height: 18px; }
+    .icon-sun { display: none; }
+    .icon-moon { display: block; }
+    [data-theme="dark"] .icon-sun { display: block; }
+    [data-theme="dark"] .icon-moon { display: none; }
+
+    /* Dark mode — form inputs */
+    [data-theme="dark"] .form-group input,
+    [data-theme="dark"] .form-group textarea {
+      background: var(--bg3);
+      color: var(--text);
+    }
+    /* Dark mode — sluzba cards */
+    [data-theme="dark"] .sluzba-item { background: var(--bg2); }
+    [data-theme="dark"] .sluzba-item:hover { background: var(--bg3); }
+    /* Dark mode — partner cards */
+    [data-theme="dark"] .partner-card { background: var(--bg3); }
+    /* Dark mode — onas card */
+    [data-theme="dark"] .onas-card { background: var(--bg3); }
+    /* Dark mode — logo invert */
+    [data-theme="dark"] .nav-logo img,
+    [data-theme="dark"] .footer-brand img { filter: brightness(0) invert(1); }
+    /* Dark mode — hero grid */
+    [data-theme="dark"] .hero-grid-lines {
+      background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    }
+    /* Dark mode — toast */
+    [data-theme="dark"] #toast { background: var(--bg2); }
+    /* Dark mode — footer */
+    [data-theme="dark"] footer { background: var(--bg2); }
+    /* Dark mode — clip dividers */
+    [data-theme="dark"] .clip-top::before { background: var(--bg); }
+    [data-theme="dark"] .clip-bottom::after { background: var(--bg); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      .onas-layout,
+      .kontakt-layout { grid-template-columns: 1fr; gap: 48px; }
+      .onas-visual { order: -1; }
+    }
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-inner { gap: 8px; }
+      .section-inner { padding: 72px 0; }
+      .sluzby-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; align-items: center; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .hero-heading { letter-spacing: -1px; }
+      .onas-card { padding: 32px; }
+    }
+
+    /* ─── Lang switcher ─── */
+    .lang-switcher { position: relative; }
+    .lang-current {
+      display: flex; align-items: center; gap: 4px;
+      font-size: .75rem; font-weight: 700; letter-spacing: .8px;
+      color: var(--text); background: var(--bg2);
+      border: 1px solid var(--border); border-radius: 6px;
+      padding: 7px 10px; cursor: pointer;
+      transition: background .2s, border-color .2s;
+    }
+    .lang-current:hover { background: var(--bg3); }
+    .lang-current svg { width: 10px; height: 10px; transition: transform .2s; flex-shrink: 0; }
+    .lang-switcher.open .lang-current svg { transform: rotate(180deg); }
+    .lang-dropdown {
+      display: none; position: absolute; top: calc(100% + 6px); right: 0;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; box-shadow: 0 8px 28px rgba(0,0,0,.12);
+      overflow: hidden; min-width: 64px; z-index: 200;
+    }
+    .lang-switcher.open .lang-dropdown { display: block; }
+    .lang-opt {
+      display: block; width: 100%; padding: 9px 14px;
+      font-size: .78rem; font-weight: 600; letter-spacing: .5px;
+      color: var(--muted); background: none; border: none;
+      cursor: pointer; text-align: left;
+      transition: background .15s, color .15s;
+    }
+    .lang-opt:hover { background: var(--bg2); color: var(--text); }
+    .lang-opt.active { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav id="navbar">
+  <div class="container nav-inner">
+    <a href="#hero" class="nav-logo" aria-label="LarSecurity.cz">
+      <img src="images/larsecurity-logo.png" alt="LarSecurity.cz" />
+      <span class="nav-logo-badge">BOZP · PO</span>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="#sluzby" data-i18n="nav_sluzby">Služby</a></li>
+      <li><a href="https://larsecurity.cz/kurzy/" target="_blank" rel="noopener" data-i18n="nav_kurzy">Kurzy</a></li>
+      <li><a href="#aktuality" data-i18n="nav_aktuality">Aktuality</a></li>
+      <li><a href="#partneri" data-i18n="nav_partneri">Partneři</a></li>
+      <li><a href="#onas" data-i18n="nav_onas">O nás</a></li>
+      <li><a href="#kontakt" data-i18n="nav_kontakt">Kontakt</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="lang-switcher" id="langSwitcher">
+        <button class="lang-current" id="langToggle" aria-label="Vybrat jazyk">
+          <span id="langLabel">CZ</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="lang-dropdown" id="langDropdown">
+          <button class="lang-opt active" data-lang="cz">CZ</button>
+          <button class="lang-opt" data-lang="pl">PL</button>
+          <button class="lang-opt" data-lang="de">DE</button>
+          <button class="lang-opt" data-lang="en">EN</button>
+        </div>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Přepnout tmavý režim">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <a href="#kontakt" class="nav-cta" data-i18n="nav_cta">Nezávazná poptávka</a>
+    </div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Otevřít menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<nav class="nav-mobile" id="mobileMenu" aria-hidden="true">
+  <a href="#sluzby" data-i18n="nav_sluzby">Služby</a>
+  <a href="https://larsecurity.cz/kurzy/" target="_blank" rel="noopener" data-i18n="nav_kurzy">Kurzy</a>
+  <a href="#aktuality" data-i18n="nav_aktuality">Aktuality</a>
+  <a href="#partneri" data-i18n="nav_partneri">Partneři</a>
+  <a href="#onas" data-i18n="nav_onas">O nás</a>
+  <a href="#kontakt" data-i18n="nav_kontakt">Kontakt</a>
+  <a href="#kontakt" data-i18n="nav_cta_arrow">Nezávazná poptávka →</a>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="container hero-layout">
+    <div class="hero-content">
+      <div class="hero-tag reveal" data-i18n="hero_tag">BOZP &amp; Požární ochrana</div>
+      <h1 class="hero-heading reveal reveal-delay-1" data-i18n-html="hero_h1">
+        odbornost,<br>jednoduchost,<br><span class="accent">rychlost.</span>
+      </h1>
+      <p class="hero-subheading reveal reveal-delay-2" data-i18n="hero_sub">
+        Bezpečnost práce a požární ochrana pro Vaši firmu — od konzultace po úplnou dokumentaci.
+      </p>
+      <div class="hero-actions reveal reveal-delay-3">
+        <a href="#kontakt" class="btn-primary">
+          <span data-i18n="hero_btn_contact">Kontaktujte nás</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="#sluzby" class="btn-ghost">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          <span data-i18n="hero_btn_services">Naše služby</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Hero illustration -->
+    <div class="hero-visual reveal reveal-delay-2" aria-hidden="true">
+      <svg class="hero-svg" viewBox="0 0 500 490" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="cardShadow" x="-20%" y="-20%" width="150%" height="160%">
+            <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#000" flood-opacity="0.07"/>
+          </filter>
+          <filter id="shieldGlow" x="-15%" y="-10%" width="140%" height="130%">
+            <feDropShadow dx="0" dy="8" stdDeviation="18" flood-color="#BE1622" flood-opacity="0.15"/>
+          </filter>
+        </defs>
+
+        <!-- Outer dashed ring -->
+        <circle cx="250" cy="232" r="208" stroke="#BE1622" stroke-width="1" stroke-dasharray="5 11" opacity="0.15"/>
+
+        <!-- Inner soft fill ring -->
+        <circle cx="250" cy="232" r="162" fill="#BE1622" fill-opacity="0.03"/>
+
+        <!-- Shield ground shadow -->
+        <ellipse cx="250" cy="415" rx="100" ry="14" fill="#BE1622" opacity="0.07"/>
+
+        <!-- Shield outer halo -->
+        <path d="M250 58 L382 104 L382 242 Q380 348 250 413 Q120 348 118 242 L118 104 Z"
+              fill="#BE1622" fill-opacity="0.05" stroke="#BE1622" stroke-width="1.5" stroke-opacity="0.2"/>
+
+        <!-- Shield body -->
+        <path d="M250 82 L360 122 L360 240 Q358 332 250 390 Q142 332 140 240 L140 122 Z"
+              fill="white" stroke="#BE1622" stroke-width="2.5" filter="url(#shieldGlow)"/>
+
+        <!-- Shield inner accent band (top) -->
+        <path d="M250 82 L360 122 L360 145 Q305 138 250 145 Q195 138 140 145 L140 122 Z"
+              fill="#BE1622" fill-opacity="0.07"/>
+
+        <!-- Large checkmark -->
+        <polyline points="196,238 237,280 309,192"
+                  stroke="#BE1622" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- ── Badge: BOZP (top-right) ── -->
+        <g filter="url(#cardShadow)">
+          <rect x="336" y="56" width="156" height="62" rx="13" fill="white" stroke="#EEE" stroke-width="1"/>
+        </g>
+        <rect x="347" y="67" width="34" height="34" rx="8" fill="#BE1622" fill-opacity="0.1"/>
+        <!-- shield mini -->
+        <path d="M364 70 L373.5 73.5 L373.5 79 Q373.5 85 364 89 Q354.5 85 354.5 79 L354.5 73.5 Z"
+              fill="none" stroke="#BE1622" stroke-width="1.8" stroke-linejoin="round"/>
+        <line x1="364" y1="76" x2="364" y2="84" stroke="#BE1622" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+        <text x="389" y="84" font-family="DM Sans,system-ui,sans-serif" font-weight="700" font-size="12" fill="#1C1917">BOZP</text>
+        <text x="389" y="100" font-family="DM Sans,system-ui,sans-serif" font-size="9.5" fill="#9CA3AF">zákon 361/2006 § 10</text>
+
+        <!-- ── Badge: Požární ochrana (bottom-right) ── -->
+        <g filter="url(#cardShadow)">
+          <rect x="336" y="358" width="156" height="62" rx="13" fill="white" stroke="#EEE" stroke-width="1"/>
+        </g>
+        <rect x="347" y="369" width="34" height="34" rx="8" fill="#BE1622" fill-opacity="0.1"/>
+        <!-- flame -->
+        <path d="M364 400 Q359 396 360.5 390 Q362 385 364 383 Q366 388 364.5 392 Q368 387 366.5 381 Q372 385 371 392 Q370 398 364 400Z"
+              fill="#BE1622" opacity="0.75"/>
+        <text x="389" y="387" font-family="DM Sans,system-ui,sans-serif" font-weight="700" font-size="11.5" fill="#1C1917">Požární ochrana</text>
+        <text x="389" y="403" font-family="DM Sans,system-ui,sans-serif" font-size="9.5" fill="#9CA3AF">zákon 133/1985 § 11</text>
+
+        <!-- ── Badge: Licence SBS (left) ── -->
+        <g filter="url(#cardShadow)">
+          <rect x="8" y="252" width="126" height="62" rx="13" fill="white" stroke="#EEE" stroke-width="1"/>
+        </g>
+        <rect x="19" y="263" width="34" height="34" rx="8" fill="#BE1622" fill-opacity="0.1"/>
+        <!-- lock -->
+        <rect x="26" y="277" width="13" height="11" rx="2.5" fill="#BE1622" opacity="0.65"/>
+        <path d="M28.5 277 L28.5 274 Q28.5 270 32.5 270 Q36.5 270 36.5 274 L36.5 277"
+              stroke="#BE1622" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <text x="60" y="278" font-family="DM Sans,system-ui,sans-serif" font-weight="700" font-size="11.5" fill="#1C1917">Licence SBS</text>
+        <text x="60" y="294" font-family="DM Sans,system-ui,sans-serif" font-size="9.5" fill="#9CA3AF">Bezp. služby</text>
+
+        <!-- Subtle connector lines -->
+        <line x1="360" y1="158" x2="342" y2="105" stroke="#BE1622" stroke-width="1" stroke-dasharray="3 5" opacity="0.18"/>
+        <line x1="358" y1="322" x2="342" y2="372" stroke="#BE1622" stroke-width="1" stroke-dasharray="3 5" opacity="0.18"/>
+        <line x1="140" y1="276" x2="134" y2="280" stroke="#BE1622" stroke-width="1" stroke-dasharray="3 5" opacity="0.18"/>
+
+        <!-- Decorative dots -->
+        <circle cx="104" cy="100" r="5" fill="#BE1622" opacity="0.18"/>
+        <circle cx="418" cy="172" r="4" fill="#BE1622" opacity="0.16"/>
+        <circle cx="455" cy="390" r="5" fill="#BE1622" opacity="0.12"/>
+        <circle cx="62" cy="390" r="3.5" fill="#BE1622" opacity="0.14"/>
+        <circle cx="478" cy="78" r="6" fill="#BE1622" opacity="0.08"/>
+        <circle cx="22" cy="150" r="3" fill="#BE1622" opacity="0.14"/>
+        <circle cx="480" cy="260" r="4" fill="#BE1622" opacity="0.1"/>
+      </svg>
+    </div>
+  </div>
+  <div class="hero-scroll-hint" aria-hidden="true">
+    <span>Scroll</span>
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<!-- ══ SLUŽBY ══ -->
+<section id="sluzby">
+  <div class="section-inner">
+    <div class="container">
+      <div class="sluzby-header">
+        <span class="section-label reveal" data-i18n="sluzby_label">Co nabízíme</span>
+        <h2 class="section-title reveal reveal-delay-1" data-i18n-html="sluzby_title">Komplexní služby<br><span class="accent">bezpečnosti práce</span></h2>
+        <p class="section-lead reveal reveal-delay-2" data-i18n="sluzby_lead">Pokrýváme celé spektrum BOZP, požární ochrany i bezpečnostních služeb — vše pod jednou střechou.</p>
+      </div>
+      <div class="sluzby-grid">
+
+        <!-- BOZP -->
+        <div class="sluzba-item reveal reveal-delay-1">
+          <div class="sluzba-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="sluzba-name" data-i18n="s1_name">BOZP — Bezpečnost a ochrana zdraví</div>
+          <div class="sluzba-desc" data-i18n="s1_desc">Odborné konzultace a poradenství v oblasti bezpečnosti práce. Zajišťujeme prověrky pracovišť, šetření pracovních úrazů a kompletní dokumentaci.</div>
+          <div class="sluzba-tags">
+            <span class="sluzba-tag" data-i18n="s1_t1">Konzultace</span>
+            <span class="sluzba-tag" data-i18n="s1_t2">Poradenství</span>
+            <span class="sluzba-tag" data-i18n="s1_t3">Prověrky pracovišť</span>
+            <span class="sluzba-tag" data-i18n="s1_t4">Šetření úrazů</span>
+            <span class="sluzba-tag" data-i18n="s1_t5">Dokumentace</span>
+          </div>
+        </div>
+
+        <!-- První pomoc -->
+        <div class="sluzba-item reveal reveal-delay-2">
+          <div class="sluzba-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          </div>
+          <div class="sluzba-name" data-i18n="s2_name">Školení první pomoci</div>
+          <div class="sluzba-desc" data-i18n="s2_desc">Praktická i teoretická výuka první pomoci pro firmy i jednotlivce. Přizpůsobíme obsah konkrétním potřebám Vašeho pracoviště.</div>
+          <div class="sluzba-tags">
+            <span class="sluzba-tag" data-i18n="s2_t1">Pro firmy</span>
+            <span class="sluzba-tag" data-i18n="s2_t2">Pro jednotlivce</span>
+            <span class="sluzba-tag" data-i18n="s2_t3">Praktické cvičení</span>
+          </div>
+        </div>
+
+        <!-- Bezpečnostní činnost -->
+        <div class="sluzba-item reveal reveal-delay-3">
+          <div class="sluzba-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div class="sluzba-name" data-i18n="s3_name">Bezpečnostní činnost</div>
+          <div class="sluzba-desc" data-i18n="s3_desc">Detektivní činnost, ochrana majetku a osob. Přistupujeme ke každému případu s maximální diskrétností a profesionalitou.</div>
+          <div class="sluzba-tags">
+            <span class="sluzba-tag" data-i18n="s3_t1">Detektivní činnost</span>
+            <span class="sluzba-tag" data-i18n="s3_t2">Ochrana majetku</span>
+            <span class="sluzba-tag" data-i18n="s3_t3">Ochrana osob</span>
+            <span class="sluzba-tag" data-i18n="s3_t4">Diskrétnost</span>
+          </div>
+        </div>
+
+        <!-- E-learning -->
+        <div class="sluzba-item reveal reveal-delay-1">
+          <div class="sluzba-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div class="sluzba-name" data-i18n="s4_name">E-learning / Školení online</div>
+          <div class="sluzba-desc" data-i18n="s4_desc">Online forma školení splňující zákonné požadavky. Ideální řešení pro firmy v době nouzového stavu nebo pro vzdálené pracovníky.</div>
+          <div class="sluzba-tags">
+            <span class="sluzba-tag" data-i18n="s4_t1">Online forma</span>
+            <span class="sluzba-tag" data-i18n="s4_t2">Zákonné požadavky</span>
+            <span class="sluzba-tag" data-i18n="s4_t3">Nouzový stav</span>
+          </div>
+        </div>
+
+        <!-- Požární ochrana -->
+        <div class="sluzba-item reveal reveal-delay-2">
+          <div class="sluzba-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 17c1.38 0 2.5-1.12 2.5-2.5s-1.12-2.5-2.5-2.5c0 0-1-4 4-6 0 6 2 8 2 8a4.5 4.5 0 01-9 0c0-1.38.56-2.63 1.5-3.5z"/></svg>
+          </div>
+          <div class="sluzba-name" data-i18n="s5_name">Požární ochrana</div>
+          <div class="sluzba-desc" data-i18n="s5_desc">Kompletní agenda PO — dokumentace, prověřování, školení zaměstnanců a tvorba únikových plánů dle platné legislativy.</div>
+          <div class="sluzba-tags">
+            <span class="sluzba-tag" data-i18n="s5_t1">Dokumentace</span>
+            <span class="sluzba-tag" data-i18n="s5_t2">Prověřování</span>
+            <span class="sluzba-tag" data-i18n="s5_t3">Školení PO</span>
+            <span class="sluzba-tag" data-i18n="s5_t4">Únikové plány</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ KURZY BANNER ══ -->
+<section id="kurzy-banner">
+  <div class="container kurzy-inner">
+    <div class="reveal">
+      <div class="kurzy-badge" data-i18n="kurzy_badge">Nově nabízíme</div>
+      <h2 class="kurzy-heading" data-i18n-html="kurzy_heading">Odborné kurzy<br>pro vaše zaměstnance</h2>
+      <p class="kurzy-sub" data-i18n="kurzy_sub">Certifikované kurzy BOZP, požární ochrany a první pomoci — online i prezenčně. Vyberte termín, který vám vyhovuje.</p>
+    </div>
+    <a href="https://larsecurity.cz/kurzy/" class="kurzy-cta reveal reveal-delay-2" target="_blank" rel="noopener">
+      <span data-i18n="kurzy_cta">Prohlédnout kurzy</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ══ AKTUALITY ══ -->
+<section id="aktuality">
+  <div class="section-inner">
+    <div class="container">
+      <span class="section-label reveal" data-i18n="akt_label">Co je nového</span>
+      <h2 class="section-title reveal reveal-delay-1" data-i18n-html="akt_title">Aktuality <span class="accent">a články</span></h2>
+      <p class="section-lead reveal reveal-delay-2" data-i18n="akt_lead">Tipy, novinky a změny v legislativě z oblasti BOZP a požární ochrany.</p>
+      <div class="aktuality-grid">
+
+        <div class="clanek-card reveal reveal-delay-1">
+          <div class="clanek-header">
+            <span class="clanek-kategorie" data-i18n="a1_kat">BOZP</span>
+            <span class="clanek-datum" data-i18n="a1_date">15. 4. 2025</span>
+          </div>
+          <div class="clanek-body">
+            <div class="clanek-title" data-i18n="a1_title">Změny v zákoně o bezpečnosti práce od roku 2025</div>
+            <p class="clanek-perex" data-i18n="a1_perex">Přehled nejdůležitějších novelizací, které ovlivní povinnosti zaměstnavatelů v oblasti BOZP. Co musíte stihnout a do kdy.</p>
+            <a href="#" class="clanek-link">
+              <span data-i18n="read_more">Číst více</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="clanek-card reveal reveal-delay-2">
+          <div class="clanek-header">
+            <span class="clanek-kategorie" data-i18n="a2_kat">Požární ochrana</span>
+            <span class="clanek-datum" data-i18n="a2_date">2. 4. 2025</span>
+          </div>
+          <div class="clanek-body">
+            <div class="clanek-title" data-i18n="a2_title">Jak správně sestavit požární evakuační plán</div>
+            <p class="clanek-perex" data-i18n="a2_perex">Evakuační plán je zákonnou povinností každé firmy. Ukážeme vám, co musí obsahovat a jak se vyhnout nejčastějším chybám při jeho tvorbě.</p>
+            <a href="#" class="clanek-link">
+              <span data-i18n="read_more">Číst více</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="clanek-card reveal reveal-delay-3">
+          <div class="clanek-header">
+            <span class="clanek-kategorie" data-i18n="a3_kat">První pomoc</span>
+            <span class="clanek-datum" data-i18n="a3_date">18. 3. 2025</span>
+          </div>
+          <div class="clanek-body">
+            <div class="clanek-title" data-i18n="a3_title">5 situací, kdy zaměstnanci nejčastěji chybují při první pomoci</div>
+            <p class="clanek-perex" data-i18n="a3_perex">Praktické školení první pomoci může zachránit život. Přinášíme přehled nejčastějších chyb a jak jim předejít pravidelným tréninkem.</p>
+            <a href="#" class="clanek-link">
+              <span data-i18n="read_more">Číst více</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PARTNEŘI ══ -->
+<section id="partneri">
+  <div class="section-inner">
+    <div class="container">
+      <span class="section-label reveal" data-i18n="part_label">Spolupracujeme s</span>
+      <h2 class="section-title reveal reveal-delay-1" data-i18n-html="part_title">Naši <span class="accent">partneři</span></h2>
+      <div class="partneri-grid">
+        <div class="partner-card reveal reveal-delay-2">
+          <div class="partner-logo-area">
+            <img src="images/TSB-logo.png" alt="TSB Facility" />
+          </div>
+          <p class="partner-desc" data-i18n="p1_desc">Odborníci v oblasti facility management a správy budov. Komplexní řešení pro provoz a údržbu nemovitostí.</p>
+          <a href="https://tsbfacility.cz/" class="partner-link" target="_blank" rel="noopener">
+            <span data-i18n="p_link">Navštívit web</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+        <div class="partner-card reveal reveal-delay-3">
+          <div class="partner-logo-area">
+            <img src="images/mediacco-logo.png" alt="Mediacco" />
+          </div>
+          <p class="partner-desc" data-i18n="p2_desc">Marketingová agentura specializující se na digitální komunikaci a budování značky. Profesionální přístup k online prezentaci.</p>
+          <a href="https://mediacco.com/" class="partner-link" target="_blank" rel="noopener">
+            <span data-i18n="p_link">Navštívit web</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ O NÁS ══ -->
+<section id="onas">
+  <div class="section-inner">
+    <div class="container">
+      <div class="onas-layout">
+        <div class="onas-text">
+          <span class="section-label reveal" data-i18n="onas_label">Za firmou stojí</span>
+          <h2 class="section-title reveal reveal-delay-1" data-i18n-html="onas_title">Odbornost<br>potvrzená <span class="accent">licencí</span></h2>
+          <p class="section-lead reveal reveal-delay-2" data-i18n="onas_lead">
+            LarSecurity.cz provozuje Roman Bis, certifikovaný Safety Manager s mnohaletou praxí v oblasti BOZP, požární ochrany a bezpečnostních služeb.
+          </p>
+          <div class="onas-features reveal reveal-delay-3">
+            <div class="onas-feature">
+              <div class="onas-feature-line"></div>
+              <div class="onas-feature-inner">
+                <h4 data-i18n="onas_f1_title">Individuální přístup</h4>
+                <p data-i18n="onas_f1_text">Každý klient dostane řešení šité na míru jeho konkrétní situaci a odvětví.</p>
+              </div>
+            </div>
+            <div class="onas-feature">
+              <div class="onas-feature-line"></div>
+              <div class="onas-feature-inner">
+                <h4 data-i18n="onas_f2_title">Rychlá reakce</h4>
+                <p data-i18n="onas_f2_text">Jsme k dispozici pro urgentní konzultace a šetření bez zbytečného čekání.</p>
+              </div>
+            </div>
+            <div class="onas-feature">
+              <div class="onas-feature-line"></div>
+              <div class="onas-feature-inner">
+                <h4 data-i18n="onas_f3_title">Jasná cena předem</h4>
+                <p data-i18n="onas_f3_text">Transparentní ceník bez skrytých poplatků. Vždy víte, co dostanete a za kolik.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="onas-visual reveal reveal-delay-2">
+          <div class="onas-card">
+            <div class="onas-avatar">RB</div>
+            <div class="onas-name">Roman Bis</div>
+            <div class="onas-role">Safety Manager &mdash; LarSecurity.cz</div>
+            <div class="onas-badges">
+              <div class="onas-badge">
+                <div class="onas-badge-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div class="onas-badge-text">
+                  <strong data-i18n="badge1_strong">BOZP — zákon 361/2006 § 10</strong>
+                  <span data-i18n="badge1_text">Odborně způsobilá osoba v prevenci rizik</span>
+                </div>
+              </div>
+              <div class="onas-badge">
+                <div class="onas-badge-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 17c1.38 0 2.5-1.12 2.5-2.5S12.38 12 11 12c0 0-1-4 4-6 0 6 2 8 2 8a4.5 4.5 0 01-9 0c0-1.38.56-2.63 1.5-3.5z"/></svg>
+                </div>
+                <div class="onas-badge-text">
+                  <strong data-i18n="badge2_strong">PO — zákon 133/1985 § 11</strong>
+                  <span data-i18n="badge2_text">Požární bezpečnost staveb</span>
+                </div>
+              </div>
+              <div class="onas-badge">
+                <div class="onas-badge-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                </div>
+                <div class="onas-badge-text">
+                  <strong data-i18n="badge3_strong">Licence SBS</strong>
+                  <span data-i18n="badge3_text">Soukromé bezpečnostní služby</span>
+                </div>
+              </div>
+              <div class="onas-badge">
+                <div class="onas-badge-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <div class="onas-badge-text">
+                  <strong data-i18n="badge4_strong">IČ: 08882185</strong>
+                  <span data-i18n="badge4_text">Registrovaný podnikatelský subjekt</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ KONTAKT ══ -->
+<section id="kontakt">
+  <div class="section-inner">
+    <div class="container">
+      <div class="kontakt-layout">
+        <div>
+          <span class="section-label reveal" data-i18n="kont_label">Napište nám</span>
+          <h2 class="section-title reveal reveal-delay-1" data-i18n-html="kont_title">Nezávazná<br><span class="accent">poptávka</span></h2>
+          <p class="section-lead reveal reveal-delay-2" style="margin-bottom:48px;" data-i18n="kont_lead">
+            Máte zájem o naše služby nebo potřebujete poradit? Ozvěte se — odpovíme co nejdříve.
+          </p>
+          <div class="kontakt-info">
+            <div class="kontakt-info-item reveal reveal-delay-3">
+              <div class="kontakt-info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div>
+                <div class="kontakt-info-label" data-i18n="kont_email_label">E-mail</div>
+                <div class="kontakt-info-value"><a href="mailto:info@larsecurity.cz">info@larsecurity.cz</a></div>
+              </div>
+            </div>
+            <div class="kontakt-info-item reveal reveal-delay-4">
+              <div class="kontakt-info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.1 2.18 2 2 0 012.08 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.41 7.45a16 16 0 006.14 6.14l.91-.91a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92v2z"/></svg>
+              </div>
+              <div>
+                <div class="kontakt-info-label" data-i18n="kont_phone_label">Telefon</div>
+                <div class="kontakt-info-value"><a href="tel:+420777151865">+420 777 151 865</a></div>
+              </div>
+            </div>
+            <div class="kontakt-info-item reveal reveal-delay-5">
+              <div class="kontakt-info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+              </div>
+              <div>
+                <div class="kontakt-info-label" data-i18n="kont_fb_label">Facebook</div>
+                <div class="kontakt-info-value"><a href="https://www.facebook.com/romanbis/" target="_blank" rel="noopener">Roman Bis</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal reveal-delay-2">
+          <form class="kontakt-form" id="contactForm" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fname" data-i18n="form_name_label">Jméno a příjmení</label>
+                <input type="text" id="fname" name="fname" placeholder="Jan Novák" data-i18n-ph="form_name_ph" required />
+              </div>
+              <div class="form-group">
+                <label for="femail" data-i18n="form_email_label">E-mail</label>
+                <input type="email" id="femail" name="femail" placeholder="vas@email.cz" data-i18n-ph="form_email_ph" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="fsubject" data-i18n="form_subject_label">Předmět</label>
+              <input type="text" id="fsubject" name="fsubject" placeholder="Zájem o BOZP konzultaci..." data-i18n-ph="form_subject_ph" />
+            </div>
+            <div class="form-group">
+              <label for="fmessage" data-i18n="form_message_label">Zpráva</label>
+              <textarea id="fmessage" name="fmessage" placeholder="Popište prosím Vaši situaci nebo dotaz..." data-i18n-ph="form_message_ph" required></textarea>
+            </div>
+            <button type="submit" class="form-submit">
+              <span data-i18n="form_submit">Odeslat poptávku</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+            <p class="form-notice" data-i18n="form_notice">Odesláním formuláře souhlasíte se zpracováním osobních údajů pro účely odpovědi na Váš dotaz.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="container footer-inner">
+    <p class="footer-copy">Copyright &copy; 2025 larsecurity.cz</p>
+    <p class="footer-copy">Made with ❤️ by <a href="https://mediacco.com/" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline;text-underline-offset:3px;">mediacco.com</a></p>
+    <div class="footer-links">
+      <a href="#" data-i18n="footer_privacy">Zásady zpracování osobních údajů</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast notification -->
+<div id="toast" role="alert" aria-live="assertive">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span data-i18n="toast_msg">Zpráva odeslána — ozveme se co nejdříve!</span>
+</div>
+
+<script>
+  /* ── Translations ── */
+  const i18n = {
+    cz: {
+      nav_sluzby:'Služby', nav_kurzy:'Kurzy', nav_aktuality:'Aktuality', nav_partneri:'Partneři', nav_onas:'O nás', nav_kontakt:'Kontakt', nav_cta:'Nezávazná poptávka', nav_cta_arrow:'Nezávazná poptávka →',
+      hero_tag:'BOZP &amp; Požární ochrana',
+      hero_h1:'odbornost,<br>jednoduchost,<br><span class="accent">rychlost.</span>',
+      hero_sub:'Bezpečnost práce a požární ochrana pro Vaši firmu — od konzultace po úplnou dokumentaci.',
+      hero_btn_contact:'Kontaktujte nás', hero_btn_services:'Naše služby',
+      sluzby_label:'Co nabízíme', sluzby_title:'Komplexní služby<br><span class="accent">bezpečnosti práce</span>',
+      sluzby_lead:'Pokrýváme celé spektrum BOZP, požární ochrany i bezpečnostních služeb — vše pod jednou střechou.',
+      s1_name:'BOZP — Bezpečnost a ochrana zdraví', s1_desc:'Odborné konzultace a poradenství v oblasti bezpečnosti práce. Zajišťujeme prověrky pracovišť, šetření pracovních úrazů a kompletní dokumentaci.',
+      s1_t1:'Konzultace', s1_t2:'Poradenství', s1_t3:'Prověrky pracovišť', s1_t4:'Šetření úrazů', s1_t5:'Dokumentace',
+      s2_name:'Školení první pomoci', s2_desc:'Praktická i teoretická výuka první pomoci pro firmy i jednotlivce. Přizpůsobíme obsah konkrétním potřebám Vašeho pracoviště.',
+      s2_t1:'Pro firmy', s2_t2:'Pro jednotlivce', s2_t3:'Praktické cvičení',
+      s3_name:'Bezpečnostní činnost', s3_desc:'Detektivní činnost, ochrana majetku a osob. Přistupujeme ke každému případu s maximální diskrétností a profesionalitou.',
+      s3_t1:'Detektivní činnost', s3_t2:'Ochrana majetku', s3_t3:'Ochrana osob', s3_t4:'Diskrétnost',
+      s4_name:'E-learning / Školení online', s4_desc:'Online forma školení splňující zákonné požadavky. Ideální řešení pro firmy v době nouzového stavu nebo pro vzdálené pracovníky.',
+      s4_t1:'Online forma', s4_t2:'Zákonné požadavky', s4_t3:'Nouzový stav',
+      s5_name:'Požární ochrana', s5_desc:'Kompletní agenda PO — dokumentace, prověřování, školení zaměstnanců a tvorba únikových plánů dle platné legislativy.',
+      s5_t1:'Dokumentace', s5_t2:'Prověřování', s5_t3:'Školení PO', s5_t4:'Únikové plány',
+      kurzy_badge:'Nově nabízíme', kurzy_heading:'Odborné kurzy<br>pro vaše zaměstnance',
+      kurzy_sub:'Certifikované kurzy BOZP, požární ochrany a první pomoci — online i prezenčně. Vyberte termín, který vám vyhovuje.', kurzy_cta:'Prohlédnout kurzy',
+      akt_label:'Co je nového', akt_title:'Aktuality <span class="accent">a články</span>',
+      akt_lead:'Tipy, novinky a změny v legislativě z oblasti BOZP a požární ochrany.',
+      a1_kat:'BOZP', a1_date:'15. 4. 2025', a1_title:'Změny v zákoně o bezpečnosti práce od roku 2025',
+      a1_perex:'Přehled nejdůležitějších novelizací, které ovlivní povinnosti zaměstnavatelů v oblasti BOZP. Co musíte stihnout a do kdy.',
+      a2_kat:'Požární ochrana', a2_date:'2. 4. 2025', a2_title:'Jak správně sestavit požární evakuační plán',
+      a2_perex:'Evakuační plán je zákonnou povinností každé firmy. Ukážeme vám, co musí obsahovat a jak se vyhnout nejčastějším chybám při jeho tvorbě.',
+      a3_kat:'První pomoc', a3_date:'18. 3. 2025', a3_title:'5 situací, kdy zaměstnanci nejčastěji chybují při první pomoci',
+      a3_perex:'Praktické školení první pomoci může zachránit život. Přinášíme přehled nejčastějších chyb a jak jim předejít pravidelným tréninkem.', read_more:'Číst více',
+      part_label:'Spolupracujeme s', part_title:'Naši <span class="accent">partneři</span>',
+      p1_desc:'Odborníci v oblasti facility management a správy budov. Komplexní řešení pro provoz a údržbu nemovitostí.',
+      p2_desc:'Marketingová agentura specializující se na digitální komunikaci a budování značky. Profesionální přístup k online prezentaci.', p_link:'Navštívit web',
+      onas_label:'Za firmou stojí', onas_title:'Odbornost<br>potvrzená <span class="accent">licencí</span>',
+      onas_lead:'LarSecurity.cz provozuje Roman Bis, certifikovaný Safety Manager s mnohaletou praxí v oblasti BOZP, požární ochrany a bezpečnostních služeb.',
+      onas_f1_title:'Individuální přístup', onas_f1_text:'Každý klient dostane řešení šité na míru jeho konkrétní situaci a odvětví.',
+      onas_f2_title:'Rychlá reakce', onas_f2_text:'Jsme k dispozici pro urgentní konzultace a šetření bez zbytečného čekání.',
+      onas_f3_title:'Jasná cena předem', onas_f3_text:'Transparentní ceník bez skrytých poplatků. Vždy víte, co dostanete a za kolik.',
+      badge1_strong:'BOZP — zákon 361/2006 § 10', badge1_text:'Odborně způsobilá osoba v prevenci rizik',
+      badge2_strong:'PO — zákon 133/1985 § 11', badge2_text:'Požární bezpečnost staveb',
+      badge3_strong:'Licence SBS', badge3_text:'Soukromé bezpečnostní služby',
+      badge4_strong:'IČ: 08882185', badge4_text:'Registrovaný podnikatelský subjekt',
+      kont_label:'Napište nám', kont_title:'Nezávazná<br><span class="accent">poptávka</span>',
+      kont_lead:'Máte zájem o naše služby nebo potřebujete poradit? Ozvěte se — odpovíme co nejdříve.',
+      kont_email_label:'E-mail', kont_phone_label:'Telefon', kont_fb_label:'Facebook',
+      form_name_label:'Jméno a příjmení', form_name_ph:'Jan Novák', form_email_label:'E-mail', form_email_ph:'vas@email.cz',
+      form_subject_label:'Předmět', form_subject_ph:'Zájem o BOZP konzultaci...', form_message_label:'Zpráva',
+      form_message_ph:'Popište prosím Vaši situaci nebo dotaz...', form_submit:'Odeslat poptávku',
+      form_notice:'Odesláním formuláře souhlasíte se zpracováním osobních údajů pro účely odpovědi na Váš dotaz.',
+      footer_privacy:'Zásady zpracování osobních údajů', toast_msg:'Zpráva odeslána — ozveme se co nejdříve!',
+      page_title:'LarSecurity.cz — BOZP a PO školení', html_lang:'cs',
+    },
+    en: {
+      nav_sluzby:'Services', nav_kurzy:'Courses', nav_aktuality:'News', nav_partneri:'Partners', nav_onas:'About Us', nav_kontakt:'Contact', nav_cta:'Free Inquiry', nav_cta_arrow:'Free Inquiry →',
+      hero_tag:'OSH &amp; Fire Protection',
+      hero_h1:'expertise,<br>simplicity,<br><span class="accent">speed.</span>',
+      hero_sub:'Workplace safety and fire protection for your company — from consultation to complete documentation.',
+      hero_btn_contact:'Contact Us', hero_btn_services:'Our Services',
+      sluzby_label:'What We Offer', sluzby_title:'Comprehensive<br><span class="accent">Workplace Safety Services</span>',
+      sluzby_lead:'We cover the full spectrum of OSH, fire protection and security services — all under one roof.',
+      s1_name:'OSH — Occupational Safety & Health', s1_desc:'Expert consultations and advisory in occupational safety. We provide workplace audits, accident investigations and complete documentation.',
+      s1_t1:'Consultations', s1_t2:'Advisory', s1_t3:'Workplace Audits', s1_t4:'Accident Investigations', s1_t5:'Documentation',
+      s2_name:'First Aid Training', s2_desc:'Practical and theoretical first aid instruction for companies and individuals. We tailor the content to the specific needs of your workplace.',
+      s2_t1:'For Companies', s2_t2:'For Individuals', s2_t3:'Practical Exercises',
+      s3_name:'Security Services', s3_desc:'Detective services, property and personal protection. We approach every case with maximum discretion and professionalism.',
+      s3_t1:'Detective Services', s3_t2:'Property Protection', s3_t3:'Personal Protection', s3_t4:'Discretion',
+      s4_name:'E-learning / Online Training', s4_desc:'Online training that meets legal requirements. Ideal for companies during emergencies or for remote workers.',
+      s4_t1:'Online Format', s4_t2:'Legal Compliance', s4_t3:'Remote Workers',
+      s5_name:'Fire Protection', s5_desc:'Complete fire protection agenda — documentation, inspections, employee training and evacuation plan creation in compliance with current legislation.',
+      s5_t1:'Documentation', s5_t2:'Inspections', s5_t3:'FP Training', s5_t4:'Evacuation Plans',
+      kurzy_badge:'New Offering', kurzy_heading:'Professional Courses<br>for Your Employees',
+      kurzy_sub:'Certified OSH, fire protection and first aid courses — online and in person. Choose a date that suits you.', kurzy_cta:'Browse Courses',
+      akt_label:"What's New", akt_title:'News <span class="accent">&amp; Articles</span>',
+      akt_lead:'Tips, updates and legislative changes in OSH and fire protection.',
+      a1_kat:'OSH', a1_date:'15 Apr 2025', a1_title:'Changes in the Workplace Safety Act from 2025',
+      a1_perex:"An overview of the most important amendments affecting employers' OSH obligations. What you need to complete and by when.",
+      a2_kat:'Fire Protection', a2_date:'2 Apr 2025', a2_title:'How to Properly Prepare a Fire Evacuation Plan',
+      a2_perex:"An evacuation plan is a legal requirement for every company. We show what it must contain and how to avoid the most common mistakes.",
+      a3_kat:'First Aid', a3_date:'18 Mar 2025', a3_title:'5 Situations Where Employees Most Often Make First Aid Mistakes',
+      a3_perex:'Practical first aid training can save lives. An overview of the most common mistakes and how to prevent them through regular practice.', read_more:'Read More',
+      part_label:'We Collaborate With', part_title:'Our <span class="accent">Partners</span>',
+      p1_desc:'Experts in facility management and building administration. Comprehensive solutions for property operation and maintenance.',
+      p2_desc:'A marketing agency specialising in digital communication and brand building. Professional approach to online presence.', p_link:'Visit Website',
+      onas_label:'Behind the Company', onas_title:'Expertise<br>confirmed by <span class="accent">licence</span>',
+      onas_lead:'LarSecurity.cz is operated by Roman Bis, a certified Safety Manager with many years of experience in OSH, fire protection and security services.',
+      onas_f1_title:'Individual Approach', onas_f1_text:'Every client receives a solution tailored to their specific situation and industry.',
+      onas_f2_title:'Fast Response', onas_f2_text:'We are available for urgent consultations and investigations without unnecessary delays.',
+      onas_f3_title:'Clear Pricing Upfront', onas_f3_text:'Transparent pricing with no hidden fees. You always know what you get and how much it costs.',
+      badge1_strong:'OSH — Act 361/2006 § 10', badge1_text:'Qualified person in risk prevention',
+      badge2_strong:'FP — Act 133/1985 § 11', badge2_text:'Fire safety of buildings',
+      badge3_strong:'SBS Licence', badge3_text:'Private security services',
+      badge4_strong:'ID: 08882185', badge4_text:'Registered business entity',
+      kont_label:'Get in Touch', kont_title:'Non-binding<br><span class="accent">Inquiry</span>',
+      kont_lead:'Interested in our services or need advice? Reach out — we will respond as soon as possible.',
+      kont_email_label:'E-mail', kont_phone_label:'Phone', kont_fb_label:'Facebook',
+      form_name_label:'Full Name', form_name_ph:'John Smith', form_email_label:'E-mail', form_email_ph:'your@email.com',
+      form_subject_label:'Subject', form_subject_ph:'Interested in OSH consultation...', form_message_label:'Message',
+      form_message_ph:'Please describe your situation or question...', form_submit:'Send Inquiry',
+      form_notice:'By submitting the form you agree to the processing of your personal data for the purpose of responding to your query.',
+      footer_privacy:'Privacy Policy', toast_msg:'Message sent — we will get back to you shortly!',
+      page_title:'LarSecurity.cz — OSH & Fire Protection', html_lang:'en',
+    },
+    de: {
+      nav_sluzby:'Leistungen', nav_kurzy:'Kurse', nav_aktuality:'Aktuelles', nav_partneri:'Partner', nav_onas:'Über uns', nav_kontakt:'Kontakt', nav_cta:'Unverbindliche Anfrage', nav_cta_arrow:'Unverbindliche Anfrage →',
+      hero_tag:'ASA &amp; Brandschutz',
+      hero_h1:'Kompetenz,<br>Einfachheit,<br><span class="accent">Schnelligkeit.</span>',
+      hero_sub:'Arbeitssicherheit und Brandschutz für Ihr Unternehmen — von der Beratung bis zur vollständigen Dokumentation.',
+      hero_btn_contact:'Kontakt aufnehmen', hero_btn_services:'Unsere Leistungen',
+      sluzby_label:'Unser Angebot', sluzby_title:'Umfassende<br><span class="accent">Arbeitssicherheitsleistungen</span>',
+      sluzby_lead:'Wir decken das gesamte Spektrum von ASA, Brandschutz und Sicherheitsdienstleistungen ab — alles aus einer Hand.',
+      s1_name:'ASA — Arbeitssicherheit und Gesundheitsschutz', s1_desc:'Fachkundige Beratung im Bereich Arbeitssicherheit. Wir führen Arbeitsplatzprüfungen, Unfalluntersuchungen und vollständige Dokumentationen durch.',
+      s1_t1:'Beratung', s1_t2:'Consulting', s1_t3:'Arbeitsplatzprüfungen', s1_t4:'Unfalluntersuchungen', s1_t5:'Dokumentation',
+      s2_name:'Erste-Hilfe-Schulung', s2_desc:'Praktische und theoretische Erste-Hilfe-Ausbildung für Unternehmen und Einzelpersonen. Wir passen die Inhalte an Ihren Arbeitsplatz an.',
+      s2_t1:'Für Unternehmen', s2_t2:'Für Einzelpersonen', s2_t3:'Praktische Übungen',
+      s3_name:'Sicherheitsdienst', s3_desc:'Detektivdienste, Objekt- und Personenschutz. Wir gehen jeden Fall mit größter Diskretion und Professionalität an.',
+      s3_t1:'Detektivdienste', s3_t2:'Objektschutz', s3_t3:'Personenschutz', s3_t4:'Diskretion',
+      s4_name:'E-Learning / Online-Schulung', s4_desc:'Online-Schulungen, die den gesetzlichen Anforderungen entsprechen. Ideal für Unternehmen in Ausnahmesituationen oder für Remote-Mitarbeiter.',
+      s4_t1:'Online-Format', s4_t2:'Gesetzliche Anforderungen', s4_t3:'Remote-Mitarbeiter',
+      s5_name:'Brandschutz', s5_desc:'Vollständige Brandschutzagenda — Dokumentation, Prüfungen, Mitarbeiterschulungen und Evakuierungspläne gemäß geltender Gesetzgebung.',
+      s5_t1:'Dokumentation', s5_t2:'Prüfungen', s5_t3:'Brandschutzschulung', s5_t4:'Evakuierungspläne',
+      kurzy_badge:'Neu im Angebot', kurzy_heading:'Fachkurse<br>für Ihre Mitarbeiter',
+      kurzy_sub:'Zertifizierte ASA-, Brandschutz- und Erste-Hilfe-Kurse — online und in Präsenz. Wählen Sie Ihren Wunschtermin.', kurzy_cta:'Kurse ansehen',
+      akt_label:'Was gibt es Neues', akt_title:'Aktuelles <span class="accent">und Artikel</span>',
+      akt_lead:'Tipps, Neuigkeiten und gesetzliche Änderungen im Bereich ASA und Brandschutz.',
+      a1_kat:'ASA', a1_date:'15. 4. 2025', a1_title:'Änderungen im Arbeitssicherheitsgesetz ab 2025',
+      a1_perex:'Überblick über die wichtigsten Änderungen, die die Pflichten der Arbeitgeber im ASA-Bereich beeinflussen werden.',
+      a2_kat:'Brandschutz', a2_date:'2. 4. 2025', a2_title:'Wie man einen Feuerevakuierungsplan richtig erstellt',
+      a2_perex:'Ein Evakuierungsplan ist eine gesetzliche Pflicht für jedes Unternehmen. Wir zeigen, was er enthalten muss und wie man häufige Fehler vermeidet.',
+      a3_kat:'Erste Hilfe', a3_date:'18. 3. 2025', a3_title:'5 Situationen, in denen Mitarbeiter bei der Ersten Hilfe am häufigsten Fehler machen',
+      a3_perex:'Praktische Erste-Hilfe-Schulungen können Leben retten. Die häufigsten Fehler und wie man ihnen durch regelmäßiges Training vorbeugt.', read_more:'Mehr lesen',
+      part_label:'Wir arbeiten mit', part_title:'Unsere <span class="accent">Partner</span>',
+      p1_desc:'Experten im Bereich Facility Management und Gebäudeverwaltung. Umfassende Lösungen für Betrieb und Instandhaltung von Immobilien.',
+      p2_desc:'Eine Marketingagentur spezialisiert auf digitale Kommunikation und Markenaufbau. Professioneller Ansatz für Online-Präsenz.', p_link:'Website besuchen',
+      onas_label:'Hinter dem Unternehmen', onas_title:'Kompetenz<br>bestätigt durch <span class="accent">Lizenz</span>',
+      onas_lead:'LarSecurity.cz wird von Roman Bis betrieben, einem zertifizierten Safety Manager mit langjähriger Erfahrung in ASA, Brandschutz und Sicherheitsdiensten.',
+      onas_f1_title:'Individueller Ansatz', onas_f1_text:'Jeder Kunde erhält eine Lösung, die auf seine konkrete Situation und Branche zugeschnitten ist.',
+      onas_f2_title:'Schnelle Reaktion', onas_f2_text:'Wir stehen für dringende Beratungen und Untersuchungen ohne unnötige Wartezeiten zur Verfügung.',
+      onas_f3_title:'Klare Preise im Voraus', onas_f3_text:'Transparente Preisgestaltung ohne versteckte Gebühren. Sie wissen immer, was Sie bekommen und was es kostet.',
+      badge1_strong:'ASA — Gesetz 361/2006 § 10', badge1_text:'Fachkundige Person in der Risikoprävention',
+      badge2_strong:'BS — Gesetz 133/1985 § 11', badge2_text:'Brandschutz von Gebäuden',
+      badge3_strong:'SBS-Lizenz', badge3_text:'Private Sicherheitsdienste',
+      badge4_strong:'UIN: 08882185', badge4_text:'Eingetragenes Unternehmen',
+      kont_label:'Schreiben Sie uns', kont_title:'Unverbindliche<br><span class="accent">Anfrage</span>',
+      kont_lead:'Interesse an unseren Leistungen oder brauchen Sie Rat? Melden Sie sich — wir antworten so schnell wie möglich.',
+      kont_email_label:'E-Mail', kont_phone_label:'Telefon', kont_fb_label:'Facebook',
+      form_name_label:'Vor- und Nachname', form_name_ph:'Max Mustermann', form_email_label:'E-Mail', form_email_ph:'ihre@email.de',
+      form_subject_label:'Betreff', form_subject_ph:'Interesse an ASA-Beratung...', form_message_label:'Nachricht',
+      form_message_ph:'Bitte beschreiben Sie Ihre Situation oder Frage...', form_submit:'Anfrage senden',
+      form_notice:'Mit dem Absenden des Formulars stimmen Sie der Verarbeitung Ihrer personenbezogenen Daten zur Beantwortung Ihrer Anfrage zu.',
+      footer_privacy:'Datenschutzrichtlinie', toast_msg:'Nachricht gesendet — wir melden uns so schnell wie möglich!',
+      page_title:'LarSecurity.cz — ASA und Brandschutz', html_lang:'de',
+    },
+    pl: {
+      nav_sluzby:'Usługi', nav_kurzy:'Kursy', nav_aktuality:'Aktualności', nav_partneri:'Partnerzy', nav_onas:'O nas', nav_kontakt:'Kontakt', nav_cta:'Zapytanie ofertowe', nav_cta_arrow:'Zapytanie ofertowe →',
+      hero_tag:'BHP &amp; Ochrona przeciwpożarowa',
+      hero_h1:'profesjonalizm,<br>prostota,<br><span class="accent">szybkość.</span>',
+      hero_sub:'Bezpieczeństwo pracy i ochrona przeciwpożarowa dla Twojej firmy — od konsultacji po pełną dokumentację.',
+      hero_btn_contact:'Skontaktuj się', hero_btn_services:'Nasze usługi',
+      sluzby_label:'Co oferujemy', sluzby_title:'Kompleksowe usługi<br><span class="accent">bezpieczeństwa pracy</span>',
+      sluzby_lead:'Obejmujemy pełne spektrum BHP, ochrony przeciwpożarowej i usług ochroniarskich — wszystko pod jednym dachem.',
+      s1_name:'BHP — Bezpieczeństwo i higiena pracy', s1_desc:'Profesjonalne konsultacje i doradztwo w zakresie bezpieczeństwa pracy. Przeprowadzamy kontrole stanowisk, dochodzenia powypadkowe i kompleksową dokumentację.',
+      s1_t1:'Konsultacje', s1_t2:'Doradztwo', s1_t3:'Kontrole stanowisk', s1_t4:'Dochodzenia powypadkowe', s1_t5:'Dokumentacja',
+      s2_name:'Szkolenie z pierwszej pomocy', s2_desc:'Praktyczna i teoretyczna nauka pierwszej pomocy dla firm i osób prywatnych. Dostosowujemy treści do konkretnych potrzeb Twojego miejsca pracy.',
+      s2_t1:'Dla firm', s2_t2:'Dla osób prywatnych', s2_t3:'Ćwiczenia praktyczne',
+      s3_name:'Działalność ochroniarska', s3_desc:'Działalność detektywistyczna, ochrona mienia i osób. Do każdej sprawy podchodzimy z maksymalną dyskrecją i profesjonalizmem.',
+      s3_t1:'Działalność detektywistyczna', s3_t2:'Ochrona mienia', s3_t3:'Ochrona osób', s3_t4:'Dyskrecja',
+      s4_name:'E-learning / Szkolenie online', s4_desc:'Szkolenia online spełniające wymogi prawne. Idealne rozwiązanie dla firm w sytuacjach kryzysowych lub dla pracowników zdalnych.',
+      s4_t1:'Format online', s4_t2:'Wymogi prawne', s4_t3:'Pracownicy zdalni',
+      s5_name:'Ochrona przeciwpożarowa', s5_desc:'Kompleksowa obsługa ppoż. — dokumentacja, kontrole, szkolenia pracowników i tworzenie planów ewakuacyjnych zgodnie z obowiązującymi przepisami.',
+      s5_t1:'Dokumentacja', s5_t2:'Kontrole', s5_t3:'Szkolenia ppoż.', s5_t4:'Plany ewakuacyjne',
+      kurzy_badge:'Nowość w ofercie', kurzy_heading:'Profesjonalne kursy<br>dla Twoich pracowników',
+      kurzy_sub:'Certyfikowane kursy BHP, ochrony przeciwpożarowej i pierwszej pomocy — online i stacjonarnie. Wybierz termin, który Ci odpowiada.', kurzy_cta:'Przeglądaj kursy',
+      akt_label:'Co nowego', akt_title:'Aktualności <span class="accent">i artykuły</span>',
+      akt_lead:'Porady, nowości i zmiany legislacyjne w zakresie BHP i ochrony przeciwpożarowej.',
+      a1_kat:'BHP', a1_date:'15. 4. 2025', a1_title:'Zmiany w ustawie o bezpieczeństwie pracy od 2025 roku',
+      a1_perex:'Przegląd najważniejszych nowelizacji, które wpłyną na obowiązki pracodawców w zakresie BHP. Co musisz zrobić i do kiedy.',
+      a2_kat:'Ochrona ppoż.', a2_date:'2. 4. 2025', a2_title:'Jak prawidłowo sporządzić plan ewakuacji pożarowej',
+      a2_perex:'Plan ewakuacyjny jest ustawowym obowiązkiem każdej firmy. Pokazujemy, co musi zawierać i jak unikać najczęstszych błędów.',
+      a3_kat:'Pierwsza pomoc', a3_date:'18. 3. 2025', a3_title:'5 sytuacji, w których pracownicy najczęściej popełniają błędy przy pierwszej pomocy',
+      a3_perex:'Praktyczne szkolenia z pierwszej pomocy mogą uratować życie. Przegląd najczęstszych błędów i jak im zapobiegać regularnym treningiem.', read_more:'Czytaj więcej',
+      part_label:'Współpracujemy z', part_title:'Nasi <span class="accent">partnerzy</span>',
+      p1_desc:'Eksperci w dziedzinie facility management i zarządzania budynkami. Kompleksowe rozwiązania dla eksploatacji i utrzymania nieruchomości.',
+      p2_desc:'Agencja marketingowa specjalizująca się w komunikacji cyfrowej i budowaniu marki. Profesjonalne podejście do obecności online.', p_link:'Odwiedź stronę',
+      onas_label:'Za firmą stoi', onas_title:'Kompetencje<br>potwierdzone <span class="accent">licencją</span>',
+      onas_lead:'LarSecurity.cz prowadzi Roman Bis, certyfikowany Safety Manager z wieloletnim doświadczeniem w BHP, ochronie przeciwpożarowej i usługach ochroniarskich.',
+      onas_f1_title:'Indywidualne podejście', onas_f1_text:'Każdy klient otrzymuje rozwiązanie skrojone na miarę jego konkretnej sytuacji i branży.',
+      onas_f2_title:'Szybka reakcja', onas_f2_text:'Jesteśmy dostępni dla pilnych konsultacji i dochodzeń bez zbędnego czekania.',
+      onas_f3_title:'Jasna cena z góry', onas_f3_text:'Przejrzysty cennik bez ukrytych opłat. Zawsze wiesz, co otrzymujesz i za ile.',
+      badge1_strong:'BHP — ustawa 361/2006 § 10', badge1_text:'Osoba wykwalifikowana w zapobieganiu zagrożeniom',
+      badge2_strong:'PPOŻ — ustawa 133/1985 § 11', badge2_text:'Bezpieczeństwo pożarowe budynków',
+      badge3_strong:'Licencja SBS', badge3_text:'Prywatne usługi ochroniarskie',
+      badge4_strong:'NIP: 08882185', badge4_text:'Zarejestrowany podmiot gospodarczy',
+      kont_label:'Napisz do nas', kont_title:'Niewiążące<br><span class="accent">zapytanie</span>',
+      kont_lead:'Interesujesz się naszymi usługami lub potrzebujesz porady? Odezwij się — odpowiemy jak najszybciej.',
+      kont_email_label:'E-mail', kont_phone_label:'Telefon', kont_fb_label:'Facebook',
+      form_name_label:'Imię i nazwisko', form_name_ph:'Jan Kowalski', form_email_label:'E-mail', form_email_ph:'twoj@email.pl',
+      form_subject_label:'Temat', form_subject_ph:'Zainteresowanie konsultacją BHP...', form_message_label:'Wiadomość',
+      form_message_ph:'Opisz proszę swoją sytuację lub pytanie...', form_submit:'Wyślij zapytanie',
+      form_notice:'Wysyłając formularz, zgadzasz się na przetwarzanie danych osobowych w celu udzielenia odpowiedzi na Twoje zapytanie.',
+      footer_privacy:'Polityka prywatności', toast_msg:'Wiadomość wysłana — odezwiemy się jak najszybciej!',
+      page_title:'LarSecurity.cz — Szkolenia BHP i ppoż.', html_lang:'pl',
+    }
+  };
+
+  function applyLang(lang) {
+    const t = i18n[lang];
+    if (!t) return;
+    document.documentElement.lang = t.html_lang;
+    document.title = t.page_title;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      if (t[el.dataset.i18n] !== undefined) el.textContent = t[el.dataset.i18n];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      if (t[el.dataset.i18nHtml] !== undefined) el.innerHTML = t[el.dataset.i18nHtml];
+    });
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+      if (t[el.dataset.i18nPh] !== undefined) el.placeholder = t[el.dataset.i18nPh];
+    });
+    document.getElementById('langLabel').textContent = lang.toUpperCase();
+    document.querySelectorAll('.lang-opt').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+    localStorage.setItem('lang', lang);
+  }
+
+  /* ── Lang switcher logic ── */
+  const langSwitcher = document.getElementById('langSwitcher');
+  const langToggle = document.getElementById('langToggle');
+  langToggle.addEventListener('click', e => {
+    e.stopPropagation();
+    langSwitcher.classList.toggle('open');
+  });
+  document.addEventListener('click', () => langSwitcher.classList.remove('open'));
+  document.querySelectorAll('.lang-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      applyLang(btn.dataset.lang);
+      langSwitcher.classList.remove('open');
+    });
+  });
+
+  const savedLang = localStorage.getItem('lang') || 'cz';
+  applyLang(savedLang);
+
+  /* ── Dark mode ── */
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (saved === 'dark' || (!saved && prefersDark)) root.setAttribute('data-theme', 'dark');
+
+  themeToggle.addEventListener('click', () => {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  });
+
+  /* ── Hamburger ── */
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    const open = hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+    mobileMenu.setAttribute('aria-hidden', !open);
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', false);
+      mobileMenu.setAttribute('aria-hidden', true);
+    });
+  });
+
+  /* ── Sticky nav tint ── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  /* ── Scroll reveal ── */
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => observer.observe(el));
+
+  /* ── Hero reveals immediately ── */
+  document.querySelectorAll('#hero .reveal').forEach(el => {
+    setTimeout(() => el.classList.add('visible'), 100);
+  });
+
+  /* ── Contact form ── */
+  const toast = document.getElementById('toast');
+  document.getElementById('contactForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const form = e.target;
+    const required = form.querySelectorAll('[required]');
+    let valid = true;
+    required.forEach(f => {
+      if (!f.value.trim()) { f.style.borderColor = '#BE1622'; valid = false; }
+      else f.style.borderColor = '';
+    });
+    if (!valid) return;
+    /* In production: replace with actual fetch/API call */
+    toast.classList.add('show');
+    form.reset();
+    setTimeout(() => toast.classList.remove('show'), 4000);
+  });
+
+  /* ── Clear field error on input ── */
+  document.querySelectorAll('#contactForm input, #contactForm textarea').forEach(f => {
+    f.addEventListener('input', () => { f.style.borderColor = ''; });
+  });
+</script>
+</body>
+</html>
