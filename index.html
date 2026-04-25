@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LarSecurity.cz — BOZP a PO školení</title>
+  <title>LarSecurity — BOZP a PO školení</title>
+  <link rel="icon" type="image/png" href="images/favicon-larsecurity.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&display=swap" rel="stylesheet" />
@@ -576,6 +577,57 @@
       .kurzy-inner { flex-direction: column; align-items: flex-start; gap: 32px; }
     }
 
+    /* ─── Aktuality ─── */
+    #aktuality { background: var(--bg2); }
+    .aktuality-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px; margin-top: 56px;
+    }
+    .clanek-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
+    }
+    .clanek-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(190,22,34,.3);
+      box-shadow: 0 12px 36px rgba(0,0,0,.08);
+    }
+    .clanek-header {
+      padding: 28px 28px 0;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .clanek-kategorie {
+      font-size: .72rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--accent);
+      background: rgba(190,22,34,.08);
+      padding: 4px 10px; border-radius: 4px;
+    }
+    .clanek-datum {
+      font-size: .78rem; color: var(--muted);
+    }
+    .clanek-body { padding: 0 28px 28px; flex: 1; display: flex; flex-direction: column; }
+    .clanek-title {
+      font-size: 1.05rem; font-weight: 700;
+      line-height: 1.4; margin-bottom: 10px; color: var(--text);
+    }
+    .clanek-perex {
+      font-size: .875rem; color: var(--muted);
+      line-height: 1.7; flex: 1;
+    }
+    .clanek-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .85rem; font-weight: 600; color: var(--accent);
+      margin-top: 20px; transition: gap .2s;
+    }
+    .clanek-link:hover { gap: 10px; }
+    .clanek-link svg { width: 14px; height: 14px; }
+
     /* ─── Theme toggle ─── */
     .theme-toggle {
       width: 38px; height: 38px;
@@ -674,6 +726,24 @@
     }
     .lang-opt:hover { background: var(--bg2); color: var(--text); }
     .lang-opt.active { color: var(--accent); }
+
+    /* ─── Aktuality loading skeleton ─── */
+    .aktuality-loading {
+      grid-column: 1 / -1;
+      display: flex; gap: 24px;
+    }
+    .aktuality-loading::before,
+    .aktuality-loading::after {
+      content: '';
+      flex: 1; height: 180px;
+      background: var(--bg2);
+      border-radius: 12px;
+      animation: shimmer 1.4s infinite;
+    }
+    @keyframes shimmer {
+      0%, 100% { opacity: .6; }
+      50% { opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -688,6 +758,7 @@
     <ul class="nav-links" role="list">
       <li><a href="#sluzby" data-i18n="nav_sluzby">Služby</a></li>
       <li><a href="https://larsecurity.cz/kurzy/" target="_blank" rel="noopener" data-i18n="nav_kurzy">Kurzy</a></li>
+      <li><a href="#aktuality" data-i18n="nav_aktuality">Aktuality</a></li>
       <li><a href="#partneri" data-i18n="nav_partneri">Partneři</a></li>
       <li><a href="#onas" data-i18n="nav_onas">O nás</a></li>
       <li><a href="#kontakt" data-i18n="nav_kontakt">Kontakt</a></li>
@@ -719,6 +790,7 @@
 <nav class="nav-mobile" id="mobileMenu" aria-hidden="true">
   <a href="#sluzby" data-i18n="nav_sluzby">Služby</a>
   <a href="https://larsecurity.cz/kurzy/" target="_blank" rel="noopener" data-i18n="nav_kurzy">Kurzy</a>
+  <a href="#aktuality" data-i18n="nav_aktuality">Aktuality</a>
   <a href="#partneri" data-i18n="nav_partneri">Partneři</a>
   <a href="#onas" data-i18n="nav_onas">O nás</a>
   <a href="#kontakt" data-i18n="nav_kontakt">Kontakt</a>
@@ -946,6 +1018,20 @@
       <span data-i18n="kurzy_cta">Prohlédnout kurzy</span>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </a>
+  </div>
+</section>
+
+<!-- ══ AKTUALITY ══ -->
+<section id="aktuality">
+  <div class="section-inner">
+    <div class="container">
+      <span class="section-label reveal" data-i18n="akt_label">Co je nového</span>
+      <h2 class="section-title reveal reveal-delay-1" data-i18n-html="akt_title">Aktuality <span class="accent">a články</span></h2>
+      <p class="section-lead reveal reveal-delay-2" data-i18n="akt_lead">Tipy, novinky a změny v legislativě z oblasti BOZP a požární ochrany.</p>
+            <div class="aktuality-grid" id="aktualityGrid">
+        <div class="aktuality-loading" aria-live="polite"></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1181,12 +1267,7 @@
       kurzy_sub:'Certifikované kurzy BOZP, požární ochrany a první pomoci — online i prezenčně. Vyberte termín, který vám vyhovuje.', kurzy_cta:'Prohlédnout kurzy',
       akt_label:'Co je nového', akt_title:'Aktuality <span class="accent">a články</span>',
       akt_lead:'Tipy, novinky a změny v legislativě z oblasti BOZP a požární ochrany.',
-      a1_kat:'BOZP', a1_date:'15. 4. 2025', a1_title:'Změny v zákoně o bezpečnosti práce od roku 2025',
-      a1_perex:'Přehled nejdůležitějších novelizací, které ovlivní povinnosti zaměstnavatelů v oblasti BOZP. Co musíte stihnout a do kdy.',
-      a2_kat:'Požární ochrana', a2_date:'2. 4. 2025', a2_title:'Jak správně sestavit požární evakuační plán',
-      a2_perex:'Evakuační plán je zákonnou povinností každé firmy. Ukážeme vám, co musí obsahovat a jak se vyhnout nejčastějším chybám při jeho tvorbě.',
-      a3_kat:'První pomoc', a3_date:'18. 3. 2025', a3_title:'5 situací, kdy zaměstnanci nejčastěji chybují při první pomoci',
-      a3_perex:'Praktické školení první pomoci může zachránit život. Přinášíme přehled nejčastějších chyb a jak jim předejít pravidelným tréninkem.', read_more:'Číst více',
+      read_more:'Číst více',
       part_label:'Spolupracujeme s', part_title:'Naši <span class="accent">partneři</span>',
       p1_desc:'Odborníci v oblasti facility management a správy budov. Komplexní řešení pro provoz a údržbu nemovitostí.',
       p2_desc:'Marketingová agentura specializující se na digitální komunikaci a budování značky. Profesionální přístup k online prezentaci.', p_link:'Navštívit web',
@@ -1231,12 +1312,7 @@
       kurzy_sub:'Certified OSH, fire protection and first aid courses — online and in person. Choose a date that suits you.', kurzy_cta:'Browse Courses',
       akt_label:"What's New", akt_title:'News <span class="accent">&amp; Articles</span>',
       akt_lead:'Tips, updates and legislative changes in OSH and fire protection.',
-      a1_kat:'OSH', a1_date:'15 Apr 2025', a1_title:'Changes in the Workplace Safety Act from 2025',
-      a1_perex:"An overview of the most important amendments affecting employers' OSH obligations. What you need to complete and by when.",
-      a2_kat:'Fire Protection', a2_date:'2 Apr 2025', a2_title:'How to Properly Prepare a Fire Evacuation Plan',
-      a2_perex:"An evacuation plan is a legal requirement for every company. We show what it must contain and how to avoid the most common mistakes.",
-      a3_kat:'First Aid', a3_date:'18 Mar 2025', a3_title:'5 Situations Where Employees Most Often Make First Aid Mistakes',
-      a3_perex:'Practical first aid training can save lives. An overview of the most common mistakes and how to prevent them through regular practice.', read_more:'Read More',
+      read_more:'Read More',
       part_label:'We Collaborate With', part_title:'Our <span class="accent">Partners</span>',
       p1_desc:'Experts in facility management and building administration. Comprehensive solutions for property operation and maintenance.',
       p2_desc:'A marketing agency specialising in digital communication and brand building. Professional approach to online presence.', p_link:'Visit Website',
@@ -1281,12 +1357,7 @@
       kurzy_sub:'Zertifizierte ASA-, Brandschutz- und Erste-Hilfe-Kurse — online und in Präsenz. Wählen Sie Ihren Wunschtermin.', kurzy_cta:'Kurse ansehen',
       akt_label:'Was gibt es Neues', akt_title:'Aktuelles <span class="accent">und Artikel</span>',
       akt_lead:'Tipps, Neuigkeiten und gesetzliche Änderungen im Bereich ASA und Brandschutz.',
-      a1_kat:'ASA', a1_date:'15. 4. 2025', a1_title:'Änderungen im Arbeitssicherheitsgesetz ab 2025',
-      a1_perex:'Überblick über die wichtigsten Änderungen, die die Pflichten der Arbeitgeber im ASA-Bereich beeinflussen werden.',
-      a2_kat:'Brandschutz', a2_date:'2. 4. 2025', a2_title:'Wie man einen Feuerevakuierungsplan richtig erstellt',
-      a2_perex:'Ein Evakuierungsplan ist eine gesetzliche Pflicht für jedes Unternehmen. Wir zeigen, was er enthalten muss und wie man häufige Fehler vermeidet.',
-      a3_kat:'Erste Hilfe', a3_date:'18. 3. 2025', a3_title:'5 Situationen, in denen Mitarbeiter bei der Ersten Hilfe am häufigsten Fehler machen',
-      a3_perex:'Praktische Erste-Hilfe-Schulungen können Leben retten. Die häufigsten Fehler und wie man ihnen durch regelmäßiges Training vorbeugt.', read_more:'Mehr lesen',
+      read_more:'Mehr lesen',
       part_label:'Wir arbeiten mit', part_title:'Unsere <span class="accent">Partner</span>',
       p1_desc:'Experten im Bereich Facility Management und Gebäudeverwaltung. Umfassende Lösungen für Betrieb und Instandhaltung von Immobilien.',
       p2_desc:'Eine Marketingagentur spezialisiert auf digitale Kommunikation und Markenaufbau. Professioneller Ansatz für Online-Präsenz.', p_link:'Website besuchen',
@@ -1331,12 +1402,7 @@
       kurzy_sub:'Certyfikowane kursy BHP, ochrony przeciwpożarowej i pierwszej pomocy — online i stacjonarnie. Wybierz termin, który Ci odpowiada.', kurzy_cta:'Przeglądaj kursy',
       akt_label:'Co nowego', akt_title:'Aktualności <span class="accent">i artykuły</span>',
       akt_lead:'Porady, nowości i zmiany legislacyjne w zakresie BHP i ochrony przeciwpożarowej.',
-      a1_kat:'BHP', a1_date:'15. 4. 2025', a1_title:'Zmiany w ustawie o bezpieczeństwie pracy od 2025 roku',
-      a1_perex:'Przegląd najważniejszych nowelizacji, które wpłyną na obowiązki pracodawców w zakresie BHP. Co musisz zrobić i do kiedy.',
-      a2_kat:'Ochrona ppoż.', a2_date:'2. 4. 2025', a2_title:'Jak prawidłowo sporządzić plan ewakuacji pożarowej',
-      a2_perex:'Plan ewakuacyjny jest ustawowym obowiązkiem każdej firmy. Pokazujemy, co musi zawierać i jak unikać najczęstszych błędów.',
-      a3_kat:'Pierwsza pomoc', a3_date:'18. 3. 2025', a3_title:'5 sytuacji, w których pracownicy najczęściej popełniają błędy przy pierwszej pomocy',
-      a3_perex:'Praktyczne szkolenia z pierwszej pomocy mogą uratować życie. Przegląd najczęstszych błędów i jak im zapobiegać regularnym treningiem.', read_more:'Czytaj więcej',
+      read_more:'Czytaj więcej',
       part_label:'Współpracujemy z', part_title:'Nasi <span class="accent">partnerzy</span>',
       p1_desc:'Eksperci w dziedzinie facility management i zarządzania budynkami. Kompleksowe rozwiązania dla eksploatacji i utrzymania nieruchomości.',
       p2_desc:'Agencja marketingowa specjalizująca się w komunikacji cyfrowej i budowaniu marki. Profesjonalne podejście do obecności online.', p_link:'Odwiedź stronę',
@@ -1380,6 +1446,7 @@
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
     localStorage.setItem('lang', lang);
+    renderAktuality(lang);
   }
 
   /* ── Lang switcher logic ── */
@@ -1439,15 +1506,15 @@
 
   /* ── Scroll reveal ── */
   const revealEls = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
+  const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
         e.target.classList.add('visible');
-        observer.unobserve(e.target);
+        revealObserver.unobserve(e.target);
       }
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  revealEls.forEach(el => observer.observe(el));
+  revealEls.forEach(el => revealObserver.observe(el));
 
   /* ── Hero reveals immediately ── */
   document.querySelectorAll('#hero .reveal').forEach(el => {
@@ -1475,6 +1542,58 @@
   /* ── Clear field error on input ── */
   document.querySelectorAll('#contactForm input, #contactForm textarea').forEach(f => {
     f.addEventListener('input', () => { f.style.borderColor = ''; });
+  });
+
+  /* ── Aktuality: dynamic loading from aktuality/ folder ── */
+  let aktualityIds = [];
+  const _arrowSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+  const _delays = ['reveal-delay-1','reveal-delay-2','reveal-delay-3','reveal-delay-4','reveal-delay-5'];
+
+  function renderAktuality(lang) {
+    if (!aktualityIds.length) return;
+    const grid = document.getElementById('aktualityGrid');
+    if (!grid) return;
+    const t = i18n[lang] || i18n['cz'];
+    const readMore = t.read_more || 'Číst více';
+    grid.innerHTML = aktualityIds.map((id, i) => {
+      const data = (window.aktualityData || {})[id];
+      if (!data) return '';
+      const art = data[lang] || data['cz'];
+      return '<div class="clanek-card reveal ' + (_delays[i] || '') + '">' +
+        '<div class="clanek-header">' +
+          '<span class="clanek-kategorie">' + art.kat + '</span>' +
+          '<span class="clanek-datum">' + art.date + '</span>' +
+        '</div>' +
+        '<div class="clanek-body">' +
+          '<div class="clanek-title">' + art.title + '</div>' +
+          '<p class="clanek-perex">' + art.perex + '</p>' +
+          '<a href="clanek.html?id=' + id + '" class="clanek-link">' +
+            '<span>' + readMore + '</span>' + _arrowSvg +
+          '</a>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    grid.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  }
+
+  function _loadScript(src, onload, onerror) {
+    const s = document.createElement('script');
+    s.src = src; s.onload = onload; s.onerror = onerror || function(){};
+    document.head.appendChild(s);
+  }
+
+  _loadScript('aktuality/index.js', function() {
+    const ids = window.aktualityIndex || [];
+    if (!ids.length) { document.getElementById('aktualityGrid').innerHTML = ''; return; }
+    let done = 0;
+    ids.forEach(function(id) {
+      _loadScript('aktuality/aktualita-' + id + '.js',
+        function() { done++; if (done === ids.length) { aktualityIds = ids; renderAktuality(savedLang); } },
+        function() { done++; if (done === ids.length) { aktualityIds = ids.filter(function(i){ return !!(window.aktualityData||{})[i]; }); renderAktuality(savedLang); } }
+      );
+    });
+  }, function() {
+    document.getElementById('aktualityGrid').innerHTML = '';
   });
 </script>
 </body>
