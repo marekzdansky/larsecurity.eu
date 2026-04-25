@@ -697,11 +697,16 @@
 
     /* ─── Lang switcher ─── */
     .lang-switcher { position: relative; }
+    .flag-img {
+      width: 22px; height: 16px;
+      border-radius: 2px; display: inline-block;
+      object-fit: cover; vertical-align: middle;
+    }
     .lang-current {
       display: flex; align-items: center;
       background: none; border: none;
       padding: 4px; cursor: pointer;
-      font-size: 1.35rem; line-height: 1;
+      line-height: 1;
       transition: opacity .2s, transform .15s;
     }
     .lang-current:hover { opacity: .6; transform: translateY(-1px); }
@@ -761,13 +766,13 @@
     <div style="display:flex;align-items:center;gap:8px;">
       <div class="lang-switcher" id="langSwitcher">
         <button class="lang-current" id="langToggle" aria-label="Vybrat jazyk">
-          <span id="langLabel">🇨🇿</span>
+          <span id="langLabel"><img src="https://flagcdn.com/20x15/cz.png" alt="CZ" class="flag-img"></span>
         </button>
         <div class="lang-dropdown" id="langDropdown">
-          <button class="lang-opt active" data-lang="cz"><span>🇨🇿</span> CZ</button>
-          <button class="lang-opt" data-lang="pl"><span>🇵🇱</span> PL</button>
-          <button class="lang-opt" data-lang="de"><span>🇩🇪</span> DE</button>
-          <button class="lang-opt" data-lang="en"><span>🇬🇧</span> EN</button>
+          <button class="lang-opt active" data-lang="cz"><img src="https://flagcdn.com/20x15/cz.png" alt="" class="flag-img"> CZ</button>
+          <button class="lang-opt" data-lang="pl"><img src="https://flagcdn.com/20x15/pl.png" alt="" class="flag-img"> PL</button>
+          <button class="lang-opt" data-lang="de"><img src="https://flagcdn.com/20x15/de.png" alt="" class="flag-img"> DE</button>
+          <button class="lang-opt" data-lang="en"><img src="https://flagcdn.com/20x15/gb.png" alt="" class="flag-img"> EN</button>
         </div>
       </div>
       <button class="theme-toggle" id="themeToggle" aria-label="Přepnout tmavý režim">
@@ -1437,8 +1442,9 @@
     document.querySelectorAll('[data-i18n-ph]').forEach(el => {
       if (t[el.dataset.i18nPh] !== undefined) el.placeholder = t[el.dataset.i18nPh];
     });
-    const _flags = { cz: '🇨🇿', pl: '🇵🇱', de: '🇩🇪', en: '🇬🇧' };
-    document.getElementById('langLabel').textContent = _flags[lang] || lang.toUpperCase();
+    const _flagSrc = { cz: 'cz', pl: 'pl', de: 'de', en: 'gb' };
+    const _fc = _flagSrc[lang] || 'cz';
+    document.getElementById('langLabel').innerHTML = `<img src="https://flagcdn.com/20x15/${_fc}.png" alt="${lang.toUpperCase()}" class="flag-img">`;
     document.querySelectorAll('.lang-opt').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
