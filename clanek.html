@@ -86,6 +86,7 @@
     }
     .lang-opt:hover { background: var(--bg2); color: var(--text); }
     .lang-opt.active { color: var(--accent); }
+    .flag-img { display: inline-block; vertical-align: middle; }
 
     /* Dark mode toggle */
     .theme-toggle {
@@ -210,10 +211,11 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="lang-dropdown" id="langDropdown">
-          <button class="lang-opt active" data-lang="cz">CZ</button>
-          <button class="lang-opt" data-lang="pl">PL</button>
-          <button class="lang-opt" data-lang="de">DE</button>
-          <button class="lang-opt" data-lang="en">EN</button>
+          <button class="lang-opt active" data-lang="cz"><img src="https://flagcdn.com/20x15/cz.png" alt="" class="flag-img"> CZ</button>
+          <button class="lang-opt" data-lang="pl"><img src="https://flagcdn.com/20x15/pl.png" alt="" class="flag-img"> PL</button>
+          <button class="lang-opt" data-lang="de"><img src="https://flagcdn.com/20x15/de.png" alt="" class="flag-img"> DE</button>
+          <button class="lang-opt" data-lang="en"><img src="https://flagcdn.com/20x15/gb.png" alt="" class="flag-img"> EN</button>
+          <button class="lang-opt" data-lang="ua"><img src="https://flagcdn.com/20x15/ua.png" alt="" class="flag-img"> UA</button>
         </div>
       </div>
       <button class="theme-toggle" id="themeToggle" aria-label="Přepnout tmavý režim">
@@ -279,16 +281,20 @@
     en: { back: 'Back to News',      footerBack: '← Back to News',      srcLabel: 'Article source', notFound: 'Article not found', notFoundSub: 'Return to', notFoundLink: 'news overview' },
     de: { back: 'Zurück zu Aktuelles', footerBack: '← Zurück zu Aktuelles', srcLabel: 'Artikelquelle', notFound: 'Artikel nicht gefunden', notFoundSub: 'Zurück zur', notFoundLink: 'Übersicht' },
     pl: { back: 'Powrót do aktualności', footerBack: '← Powrót do aktualności', srcLabel: 'Źródło artykułu', notFound: 'Artykuł nie znaleziony', notFoundSub: 'Wróć do', notFoundLink: 'przeglądu aktualności' },
+    ua: { back: 'Назад до новин', footerBack: '← Назад до новин', srcLabel: 'Джерело статті', notFound: 'Статтю не знайдено', notFoundSub: 'Повернутися до', notFoundLink: 'огляду новин' },
   };
 
   let currentLang = localStorage.getItem('lang') || 'cz';
   let articleData = null;
 
+  const _flagCode = { cz: 'cz', pl: 'pl', de: 'de', en: 'gb', ua: 'ua' };
+
   function setLang(lang) {
     if (!ui[lang]) return;
     currentLang = lang;
     localStorage.setItem('lang', lang);
-    document.getElementById('langLabel').textContent = lang.toUpperCase();
+    const fc = _flagCode[lang] || lang;
+    document.getElementById('langLabel').innerHTML = `<img src="https://flagcdn.com/20x15/${fc}.png" alt="${lang.toUpperCase()}" class="flag-img">`;
     document.querySelectorAll('.lang-opt').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
