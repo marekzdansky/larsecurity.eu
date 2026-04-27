@@ -40,11 +40,12 @@ const i18n = {
     kont_label:'Napište nám', kont_title:'Nezávazná<br><span class="accent">poptávka</span>',
     kont_lead:'Máte zájem o naše služby nebo potřebujete poradit? Ozvěte se — odpovíme co nejdříve.',
     kont_email_label:'E-mail', kont_phone_label:'Telefon', kont_fb_label:'Facebook',
-    form_name_label:'Jméno a příjmení', form_name_ph:'Jan Novák', form_email_label:'E-mail', form_email_ph:'vas@email.cz',
+    form_name_label:'Jméno a příjmení', form_name_ph:'Jan Novotný', form_email_label:'E-mail', form_email_ph:'vas@email.cz',
     form_subject_label:'Předmět', form_subject_ph:'Zájem o BOZP konzultaci...', form_message_label:'Zpráva',
     form_message_ph:'Popište prosím Vaši situaci nebo dotaz...', form_submit:'Odeslat poptávku',
     form_notice:'Odesláním formuláře souhlasíte se zpracováním osobních údajů pro účely odpovědi na Váš dotaz.',
     footer_privacy:'Zásady zpracování osobních údajů', toast_msg:'Zpráva odeslána — ozveme se co nejdříve!',
+    cookie_msg:'Tento web používá analytické cookies (Google Analytics) pro měření návštěvnosti.', cookie_link:' Zásady cookies', cookie_accept:'Přijmout vše', cookie_reject:'Odmítnout',
     page_title:'LarSecurity.cz — BOZP a PO školení', html_lang:'cs',
   },
   en: {
@@ -92,6 +93,7 @@ const i18n = {
     form_message_ph:'Please describe your situation or question...', form_submit:'Send Inquiry',
     form_notice:'By submitting the form you agree to the processing of your personal data for the purpose of responding to your query.',
     footer_privacy:'Privacy Policy', toast_msg:'Message sent — we will get back to you shortly!',
+    cookie_msg:'This website uses analytical cookies (Google Analytics) to track traffic.', cookie_link:' Cookie Policy', cookie_accept:'Accept All', cookie_reject:'Decline',
     page_title:'LarSecurity.cz — OSH & Fire Protection', html_lang:'en',
   },
   de: {
@@ -139,6 +141,7 @@ const i18n = {
     form_message_ph:'Bitte beschreiben Sie Ihre Situation oder Frage...', form_submit:'Anfrage senden',
     form_notice:'Mit dem Absenden des Formulars stimmen Sie der Verarbeitung Ihrer personenbezogenen Daten zur Beantwortung Ihrer Anfrage zu.',
     footer_privacy:'Datenschutzrichtlinie', toast_msg:'Nachricht gesendet — wir melden uns so schnell wie möglich!',
+    cookie_msg:'Diese Website verwendet Analyse-Cookies (Google Analytics) zur Messung der Besucherzahlen.', cookie_link:' Cookie-Richtlinie', cookie_accept:'Alle akzeptieren', cookie_reject:'Ablehnen',
     page_title:'LarSecurity.cz — ASA und Brandschutz', html_lang:'de',
   },
   pl: {
@@ -186,6 +189,7 @@ const i18n = {
     form_message_ph:'Opisz proszę swoją sytuację lub pytanie...', form_submit:'Wyślij zapytanie',
     form_notice:'Wysyłając formularz, zgadzasz się na przetwarzanie danych osobowych w celu udzielenia odpowiedzi na Twoje zapytanie.',
     footer_privacy:'Polityka prywatności', toast_msg:'Wiadomość wysłana — odezwiemy się jak najszybciej!',
+    cookie_msg:'Ta strona używa analitycznych plików cookie (Google Analytics) do pomiaru ruchu.', cookie_link:' Polityka cookies', cookie_accept:'Akceptuj wszystkie', cookie_reject:'Odrzuć',
     page_title:'LarSecurity.cz — Szkolenia BHP i ppoż.', html_lang:'pl',
   },
   ua: {
@@ -233,6 +237,7 @@ const i18n = {
     form_message_ph:'Будь ласка, опишіть Вашу ситуацію або питання...', form_submit:'Надіслати запит',
     form_notice:'Надсилаючи форму, Ви погоджуєтесь на обробку персональних даних з метою відповіді на Ваш запит.',
     footer_privacy:'Політика конфіденційності', toast_msg:'Повідомлення надіслано — ми зв\'яжемося з Вами якнайшвидше!',
+    cookie_msg:'Цей сайт використовує аналітичні файли cookie (Google Analytics) для вимірювання відвідуваності.', cookie_link:' Політика cookies', cookie_accept:'Прийняти все', cookie_reject:'Відхилити',
     page_title:'LarSecurity.cz — Охорона праці та пожежна безпека', html_lang:'uk',
   }
 };
@@ -406,3 +411,20 @@ _loadScript('aktuality/index.js', function() {
 }, function() {
   document.getElementById('aktualityGrid').innerHTML = '';
 });
+
+/* ── Cookie consent ── */
+(function() {
+  const banner = document.getElementById('cookieBanner');
+  if (!banner) return;
+  if (!localStorage.getItem('cookieConsent')) {
+    setTimeout(() => banner.classList.add('show'), 800);
+  }
+  document.getElementById('cookieAccept').addEventListener('click', () => {
+    localStorage.setItem('cookieConsent', 'accepted');
+    banner.classList.remove('show');
+  });
+  document.getElementById('cookieReject').addEventListener('click', () => {
+    localStorage.setItem('cookieConsent', 'rejected');
+    banner.classList.remove('show');
+  });
+})();

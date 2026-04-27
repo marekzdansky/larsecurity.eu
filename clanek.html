@@ -190,9 +190,39 @@
     .footer-back { font-size: .8rem; font-weight: 600; color: var(--accent); }
     .footer-back:hover { text-decoration: underline; }
 
+    /* Cookie banner */
+    .cookie-banner {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 999;
+      background: var(--bg); border-top: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+      justify-content: space-between;
+      box-shadow: 0 -4px 24px rgba(0,0,0,.08);
+      transform: translateY(100%); transition: transform .35s ease;
+    }
+    .cookie-banner.show { transform: translateY(0); }
+    .cookie-banner-text { font-size: .85rem; color: var(--muted); flex: 1; min-width: 200px; }
+    .cookie-banner-text a { color: var(--accent); font-weight: 600; }
+    .cookie-banner-text a:hover { text-decoration: underline; }
+    .cookie-banner-actions { display: flex; gap: 10px; flex-shrink: 0; }
+    .cookie-accept {
+      background: var(--accent); color: #fff; border: none; border-radius: 6px;
+      padding: 9px 20px; font-size: .85rem; font-weight: 600; cursor: pointer;
+      font-family: inherit; transition: background .2s;
+    }
+    .cookie-accept:hover { background: #D41E2C; }
+    .cookie-reject {
+      background: var(--bg2); color: var(--muted); border: 1px solid var(--border);
+      border-radius: 6px; padding: 9px 20px; font-size: .85rem; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: background .2s, color .2s;
+    }
+    .cookie-reject:hover { background: var(--bg3); color: var(--text); }
     @media (max-width: 600px) {
       .nav-logo-badge { display: none; }
       .footer-inner { flex-direction: column; align-items: flex-start; }
+      .cookie-banner { padding: 14px 16px; }
+      .cookie-banner-actions { width: 100%; }
+      .cookie-accept, .cookie-reject { flex: 1; text-align: center; }
     }
   </style>
 </head>
@@ -375,6 +405,50 @@
     script.onerror = showError;
     document.head.appendChild(script);
   }
+
+  /* ── Cookie consent ── */
+  const _cookieTexts = {
+    cz: { msg:'Tento web používá analytické cookies (Google Analytics) pro měření návštěvnosti.', link:' Zásady cookies', accept:'Přijmout vše', reject:'Odmítnout' },
+    en: { msg:'This website uses analytical cookies (Google Analytics) to track traffic.', link:' Cookie Policy', accept:'Accept All', reject:'Decline' },
+    de: { msg:'Diese Website verwendet Analyse-Cookies (Google Analytics) zur Messung der Besucherzahlen.', link:' Cookie-Richtlinie', accept:'Alle akzeptieren', reject:'Ablehnen' },
+    pl: { msg:'Ta strona używa analitycznych plików cookie (Google Analytics) do pomiaru ruchu.', link:' Polityka cookies', accept:'Akceptuj wszystkie', reject:'Odrzuć' },
+    ua: { msg:'Цей сайт використовує аналітичні файли cookie (Google Analytics) для вимірювання відвідуваності.', link:' Політика cookies', accept:'Прийняти все', reject:'Відхилити' },
+  };
+  function _updateCookieLang(lang) {
+    const t = _cookieTexts[lang] || _cookieTexts.cz;
+    document.getElementById('cookieMsg').textContent = t.msg;
+    document.getElementById('cookieLink').textContent = t.link;
+    document.getElementById('cookieAccept').textContent = t.accept;
+    document.getElementById('cookieReject').textContent = t.reject;
+  }
+  (function() {
+    const banner = document.getElementById('cookieBanner');
+    if (!banner) return;
+    _updateCookieLang(currentLang);
+    if (!localStorage.getItem('cookieConsent')) {
+      setTimeout(() => banner.classList.add('show'), 800);
+    }
+    document.getElementById('cookieAccept').addEventListener('click', () => {
+      localStorage.setItem('cookieConsent', 'accepted');
+      banner.classList.remove('show');
+    });
+    document.getElementById('cookieReject').addEventListener('click', () => {
+      localStorage.setItem('cookieConsent', 'rejected');
+      banner.classList.remove('show');
+    });
+  })();
 </script>
+
+<!-- ══ COOKIE BANNER ══ -->
+<div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Cookie souhlas">
+  <p class="cookie-banner-text">
+    <span id="cookieMsg">Tento web používá analytické cookies (Google Analytics) pro měření návštěvnosti.</span>
+    <a href="zasady.html" id="cookieLink"> Zásady cookies</a>
+  </p>
+  <div class="cookie-banner-actions">
+    <button class="cookie-reject" id="cookieReject">Odmítnout</button>
+    <button class="cookie-accept" id="cookieAccept">Přijmout vše</button>
+  </div>
+</div>
 </body>
 </html>
