@@ -324,6 +324,16 @@ section { position: relative; }
   object-fit: contain; object-position: left;
 }
 [data-theme="dark"] .partner-logo-area img { filter: brightness(0) invert(1); }
+.partner-avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(190,22,34,.1); color: var(--accent);
+  font-size: 1.1rem; font-weight: 700; letter-spacing: .5px;
+  display: flex; align-items: center; justify-content: center;
+}
+.partner-person-name {
+  font-size: 1.05rem; font-weight: 700; color: var(--text); letter-spacing: -.2px;
+}
+.partner-person-role { font-size: .78rem; color: var(--muted); }
 .partner-desc { font-size: .9rem; color: var(--muted); line-height: 1.7; }
 .partner-link {
   display: inline-flex; align-items: center; gap: 6px;
