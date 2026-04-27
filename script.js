@@ -26,7 +26,7 @@ const i18n = {
     part_label:'Spolupracujeme s', part_title:'Naši <span class="accent">partneři</span>',
     p1_desc:'Odborníci v oblasti facility management a správy budov. Komplexní řešení pro provoz a údržbu nemovitostí.',
     p2_desc:'Marketingová agentura specializující se na digitální komunikaci a budování značky. Profesionální přístup k online prezentaci.', p_link:'Navštívit web',
-    p3_role:'Odborně způsobilá osoba v BOZP a PO',
+    p3_role:'Odborně způsobilá osoba v BOZP',
     p3_desc:'Téměř třicet let praxe v prevenci rizik a požární ochraně. Od roku 1998 svazový inspektor BOZP v OS UNIOS, člen Rady vlády pro BOZP a předseda Stálého výboru pro legislativu. Autor řady odborných publikací.',
     onas_label:'Za firmou stojí', onas_title:'Odbornost<br>potvrzená <span class="accent">licencí</span>',
     onas_lead:'LarSecurity.cz provozuje Roman Bis, certifikovaný Safety Manager s mnohaletou praxí v oblasti BOZP, požární ochrany a bezpečnostních služeb.',
